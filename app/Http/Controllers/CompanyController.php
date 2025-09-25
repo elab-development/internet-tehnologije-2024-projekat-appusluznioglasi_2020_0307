@@ -41,6 +41,7 @@ class CompanyController extends Controller
         $validator=Validator::make(request()->all(),[
             'name'=>'required',
             'user_id'=>'required',
+            'badge_verified'=>'boolean',
 
         ]);
         if($validator->fails()){
@@ -55,7 +56,7 @@ class CompanyController extends Controller
      */
     public function show(Company $company)
     {
-        //
+        return new CompanyResource($company);
     }
 
     /**
@@ -79,8 +80,8 @@ class CompanyController extends Controller
         if($validator->fails()){
             return response()->json($validator->errors(),400);
         }
-        $company=$this->service->updateCompany($company,$request->toArray());
-        return response()->json(['data'=>new CompanyResource($company),'message'=>"Company updated successfully"],201);
+        $updated=$this->service->updateCompany($company,$request->toArray());
+        return response()->json(['data'=>new CompanyResource($updated),'message'=>"Company updated successfully"],201);
     }
 
     /**

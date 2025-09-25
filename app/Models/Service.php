@@ -8,7 +8,7 @@ class Service extends Model
 {
     protected $guarded=['id'];
 
-    protected $fillable=['title','description','freelancer_id','max_employees','company_id'];
+    protected $fillable=['title','description','freelancer_id','max_employees','company_id','price'];
 
     // Service ima više rasporeda (schedule)
     public function schedules()

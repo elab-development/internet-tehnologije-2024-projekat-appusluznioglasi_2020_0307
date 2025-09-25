@@ -61,7 +61,7 @@ class User extends Authenticatable
     // Ako je freelancer → može nuditi više servisa
     public function services()
     {
-        return $this->hasMany(Service::class);
+        return $this->hasMany(Service::class)->where('role', 'freelancer');
     }
 
     // Ako je company → ima 1:1 Company

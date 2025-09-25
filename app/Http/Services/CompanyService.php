@@ -20,7 +20,7 @@ class CompanyService
 
     }
     public function updateCompany(Company $company, array $request):Company{
-         $company->update([$request]);
+         $company->update($request);
          return $company;
     }
     public function deleteCompany(Company $company):bool{
