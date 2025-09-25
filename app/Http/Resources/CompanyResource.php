@@ -16,7 +16,7 @@ class CompanyResource extends JsonResource
     {
         return [
             'name'=>$this->name,
-            'admin'=>new UserResource($this->company),
+            'admin'=>new UserResource($this->user),
             'badge_verified'=>$this->badge_verified,
             'description'=>$this->description
 
