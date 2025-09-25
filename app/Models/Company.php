@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 class Company extends Model
 {
 
+    protected $fillable=['name','description','user_id','badge_verified'];
+    protected $guarded=['id'];
     // Svaka kompanija pripada jednom user-u
     public function user()
     {

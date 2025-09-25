@@ -6,6 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class Service extends Model
 {
+    protected $guarded=['id'];
+
+    protected $fillable=['title','description','freelancer_id','max_employees','company_id'];
 
     // Service ima više rasporeda (schedule)
     public function schedules()
@@ -28,12 +31,12 @@ class Service extends Model
     // Ako je freelancer vlasnik
     public function freelancer()
     {
-        return $this->belongsTo(User::class, 'owner_id');
+        return $this->belongsTo(User::class, 'freelancer_id');
     }
 
     // Ako je company vlasnik
     public function company()
     {
-        return $this->belongsTo(Company::class, 'owner_id');
+        return $this->belongsTo(Company::class, );
     }
 }

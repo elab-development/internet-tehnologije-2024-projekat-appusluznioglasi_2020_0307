@@ -6,6 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class Schedule extends Model
 {
+    protected $guarded=['id'];
+
+    protected $fillable=['service_id','time_from','time_to','date','assigned_employees'];
 // Schedule pripada jednom servisu
     public function service()
     {

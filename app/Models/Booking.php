@@ -7,6 +7,8 @@ use NunoMaduro\Collision\Provider;
 
 class Booking extends Model
 {
+    protected $guarded=['id'];
+    protected $fillable=['service_id','user_id','schedule_id','status'];
 
 
     // Booking pripada user-u

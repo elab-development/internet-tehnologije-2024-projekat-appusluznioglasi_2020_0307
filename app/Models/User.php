@@ -60,7 +60,7 @@ class User extends Authenticatable
     // Ako je freelancer → može nuditi više servisa
     public function services()
     {
-        return $this->hasMany(Service::class, 'owner_id');
+        return $this->hasMany(Service::class);
     }
 
     // Ako je company → ima 1:1 Company

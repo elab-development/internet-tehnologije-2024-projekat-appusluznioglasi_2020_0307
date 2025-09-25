@@ -7,6 +7,9 @@ use Illuminate\Database\Eloquent\Model;
 class Review extends Model
 {
 
+    protected $guarded=['id'];
+    protected $fillable=['user_id','service_id','rating','comment'];
+
 
 // Review pripada jednom user-u (ko je ostavio)
     public function user()
@@ -14,15 +17,7 @@ class Review extends Model
         return $this->belongsTo(User::class);
     }
 
-    // Ako je target freelancer
-    public function freelancer()
-    {
-        return $this->belongsTo(User::class, 'target_id')->where('target_type', 'freelancer');
-    }
-
-    // Ako je target company
-    public function company()
-    {
-        return $this->belongsTo(Company::class, 'target_id')->where('target_type', 'company');
-    }
+   public function service(){
+        return $this->belongsTo(Service::class);
+   }
 }
