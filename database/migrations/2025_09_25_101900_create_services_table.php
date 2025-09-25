@@ -16,14 +16,11 @@ return new class extends Migration
             $table->string('title');
             $table->text('description')->nullable();
             $table->decimal('price', 8, 2);
-        // freelancer ili company vlasnik
-            $table->unsignedBigInteger('freelancer_id')->nullable();
-            $table->unsignedBigInteger('company_id')->nullable();
             $table->integer('max_employees')->default(1); // za kompaniju
-            $table->timestamps();
 
-            $table->foreign('freelancer_id')->references('id')->on('users')->onDelete('cascade');
-            $table->foreign('company_id')->references('id')->on('companies')->onDelete('cascade');
+
+            $table->foreignId('freelancer_id')->nullable()->constrained('users')->onDelete('cascade');
+            $table->foreignId('company_id')->nullable()->constrainted('companies')->onDelete('cascade');
             $table->timestamps();
         });
     }
