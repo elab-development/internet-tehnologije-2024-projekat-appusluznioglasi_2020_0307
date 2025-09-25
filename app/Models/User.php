@@ -21,6 +21,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'role',
     ];
 
     /**
@@ -44,5 +45,39 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public function isUser() {
+        return $this->role === 'user';
+    }
+
+    public function isFreelancer() {
+        return $this->role === 'freelancer';
+    }
+
+    public function isCompany() {
+        return $this->role === 'company';
+    }
+    public function services(){
+        if ($this->isFreelancer()||$this->isCompany()){
+            return $this->hasMany(Service::class);
+
+        }
+        return null;
+    }
+    public function reviews(){
+
+        return $this->hasMany(Review::class);
+    }
+    public function company(){
+        if ($this->isCompany()){
+            return $this->belongsTo(Company::class);
+
+        }
+        else return null;
+    }
+    public function bookings()
+    {
+        return $this->hasMany(Booking::class);
     }
 }
