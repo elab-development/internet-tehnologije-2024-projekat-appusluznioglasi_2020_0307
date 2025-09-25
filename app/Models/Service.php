@@ -7,4 +7,33 @@ use Illuminate\Database\Eloquent\Model;
 class Service extends Model
 {
 
+    // Service ima više rasporeda (schedule)
+    public function schedules()
+    {
+        return $this->hasMany(Schedule::class);
+    }
+
+    // Service može imati više booking-a
+    public function bookings()
+    {
+        return $this->hasMany(Booking::class);
+    }
+
+    // Service može imati više review-a
+    public function reviews()
+    {
+        return $this->hasMany(Review::class);
+    }
+
+    // Ako je freelancer vlasnik
+    public function freelancer()
+    {
+        return $this->belongsTo(User::class, 'owner_id');
+    }
+
+    // Ako je company vlasnik
+    public function company()
+    {
+        return $this->belongsTo(Company::class, 'owner_id');
+    }
 }

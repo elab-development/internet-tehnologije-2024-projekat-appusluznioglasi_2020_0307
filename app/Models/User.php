@@ -47,6 +47,28 @@ class User extends Authenticatable
         ];
     }
 
+    public function bookings()
+    {
+        return $this->hasMany(Booking::class);
+    }
+    // User može ostaviti više review-a
+    public function reviews()
+    {
+        return $this->hasMany(Review::class);
+    }
+
+    // Ako je freelancer → može nuditi više servisa
+    public function services()
+    {
+        return $this->hasMany(Service::class, 'owner_id');
+    }
+
+    // Ako je company → ima 1:1 Company
+    public function company()
+    {
+        return $this->hasOne(Company::class);
+    }
+
 
 
 }
