@@ -45,7 +45,7 @@ class ServiceController extends Controller
         if($validator->fails()){
             return response()->json($validator->errors(),400);
         }
-        $service=$this->serviceService->addService($request->toArray());
+        $service=$this->serviceService->addService($request->toArray(),$request->user());
         return response()->json(['data'=>new ServiceResource($service),'message'=>"Service added successfully"],201);
     }
 

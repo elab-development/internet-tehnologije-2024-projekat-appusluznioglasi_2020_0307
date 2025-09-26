@@ -3,23 +3,30 @@
 namespace App\Http\Services;
 
 use App\Models\Service;
+use App\Models\User;
+use Exception;
 
 class ServiceService
 {
 
-    public function addService(array $data): Service
+    public function addService(array $data,User $user): Service
     {
-        $service=Service::create(
-            [
-                'title'=>$data['title'],
-                'description'=>$data['description']??null,
-                'price'=>$data['price'],
-                'company_id'=>$data['company_id']??null,
-                'freelancer_id'=>$data['freelancer_id']??null,
-                'max_employees'=>$data['max_employees']??1,
-            ]
-        );
-        return $service;
+        $attributes = [
+            'title' => $data['title'],
+            'description' => $data['description'] ?? null,
+            'price' => $data['price'],
+            'max_employees' => $data['max_employees'] ?? 1,
+        ];
+
+        if ($user->role === 'freelancer') {
+            $attributes['freelancer_id'] = $user->id;
+        } elseif ($user->role === 'company') {
+            $attributes['company_id'] = $user->id;
+        } else {
+            throw new Exception('Ovaj tip korisnika ne može da dodaje usluge.');
+        }
+
+        return Service::create($attributes);
     }
     public function updateService(Service $service, array $data): Service{
         $service->update($data);

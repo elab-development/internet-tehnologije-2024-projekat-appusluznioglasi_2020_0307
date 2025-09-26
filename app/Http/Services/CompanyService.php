@@ -3,19 +3,17 @@
 namespace App\Http\Services;
 
 use App\Models\Company;
-use Illuminate\Support\Facades\Request;
+use Illuminate\Http\Request;
 
 class CompanyService
 {
     public function addCompany(array $request):Company{
-        $company = Company::create(
-            [
+        $company = Company::create([
                 'name'=>$request['name'],
-                'description'=>$request['description'],
-                'badge_verified'=>$request['badge_verified'],
+                'description'=>$request['description']??null,
+                'badge_verified'=>$request['badge_verified']??false,
                 'user_id'=>$request['user_id'],
-            ]
-        );
+            ]);
         return $company;
 
     }

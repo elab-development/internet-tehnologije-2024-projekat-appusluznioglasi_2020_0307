@@ -31,12 +31,12 @@ class Service extends Model
     // Ako je freelancer vlasnik
     public function freelancer()
     {
-        return $this->belongsTo(User::class, 'freelancer_id');
+        return $this->belongsTo(User::class, );
     }
 
     // Ako je company vlasnik
     public function company()
     {
-        return $this->belongsTo(Company::class, );
+        return $this->belongsTo(Company::class);
     }
 }
