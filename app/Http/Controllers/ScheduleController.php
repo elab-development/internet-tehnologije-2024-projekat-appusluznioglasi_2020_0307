@@ -38,9 +38,9 @@ class ScheduleController extends Controller
     public function store(Request $request)
     {
         $validator=Validator::make($request->all(),[
-            'date'=>['required', 'date_format:Y-m-d'],
+            'date' => ['required', 'date_format:Y-m-d', 'after_or_equal:today'],
             'time_from' => ['required', 'date_format:H:i'],
-            'time_to'   => ['required', 'date_format:H:i'],
+            'time_to'   => ['required', 'date_format:H:i','after:time_from'],
             'assigned_employees'=> ['integer'],
             'service_id'=>['required'],
         ]);
@@ -58,6 +58,49 @@ class ScheduleController extends Controller
     {
         return new ScheduleResource($schedule);
     }
+    public function showForDate(Request $request)
+    {
+        $date=$request->input('date');
+        $schedules=$this->scheduleService->getAllSchedulesForDate($date);
+        return response()->json(["schedules"=>ScheduleResource::collection($schedules)],200);
+    }
+    public function showForDateForServiceName(Request $request)
+    {
+        $date=$request->input('date');
+        $title=$request->input('title');
+      
+        $schedules=$this->scheduleService->getAllSchedulesForDateAndTitle($date,$title);
+        return response()->json(["schedules"=>ScheduleResource::collection($schedules)],200);
+    }
+     public function showForDateForUser(Request $request)
+    {
+        $date=$request->input('date');
+        $user=$request->user();
+        if($user->role=='company'){
+                    $schedules=$this->scheduleService->getAllSchedulesForDateAndUser($date,companyUserId:$user->id);
+
+        }else{
+                $schedules=$this->scheduleService->getAllSchedulesForDateAndUser($date,freelancerId: $user->id);
+
+        }
+      
+        return response()->json(["schedules"=>ScheduleResource::collection($schedules)],200);
+    }
+      public function showForUser(Request $request)
+    {
+    
+        $user=$request->user();
+        if($user->role=='company'){
+                    $schedules=$this->scheduleService->getAllSchedulesForUser(companyUserId:$user->id);
+
+        }else{
+                $schedules=$this->scheduleService->getAllSchedulesForUser(freelancerId: $user->id);
+
+        }
+      
+        return response()->json(["schedules"=>ScheduleResource::collection($schedules)],200);
+    }
+
 
     /**
      * Show the form for editing the specified resource.

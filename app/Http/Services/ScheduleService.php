@@ -5,6 +5,8 @@ namespace App\Http\Services;
 use App\Models\Schedule;
 use App\Models\User;
 use Exception;
+use Illuminate\Database\Eloquent\Collection;
+use phpDocumentor\Reflection\PseudoTypes\List_;
 
 class ScheduleService
 {
@@ -24,12 +26,56 @@ class ScheduleService
        
 
     } 
-    public function updateService(Service $service, array $data): Service{
-        $service->update($data);
-        return $service;
+    public function updateSchedule(Schedule $schedule, array $data): Schedule{
+        $schedule->update($data);
+        return $schedule;
 
     }
-    public function deleteService(Service $service): bool{
-       return $service->delete();
+    public function deleteSchedule(Schedule $schedule): bool{
+       return $$schedule->delete();
+    }
+    public function getAllSchedulesForDate($date):Collection{
+      $schedules = Schedule::where('date', $date)->get();
+      return $schedules;
+    }
+     public function getAllSchedulesForDateAndTitle($date,$title):Collection{
+      $schedules = Schedule::where('date', $date)
+      ->whereHas('service', function ($query) use ($title) {
+        $query->where('title', $title);
+      })->get();
+      return $schedules;
+    }
+     public function getAllSchedulesForDateAndUser($date,$freelancerId=null,$companyUserId=null):Collection{
+      return Schedule::where('date', $date)
+        ->whereHas('service', function ($q) use ($freelancerId, $companyUserId) {
+            if ($freelancerId) {
+                $q->whereNull('company_id')
+                  ->where('freelancer_id', $freelancerId);
+            }
+
+            if ($companyUserId) {
+                $q->whereNull('freelancer_id')
+                  ->whereHas('company', function ($q2) use ($companyUserId) {
+                      $q2->where('user_id', $companyUserId);
+                  });
+            }
+        })
+        ->get();
+    } 
+    public function getAllSchedulesForUser($freelancerId=null,$companyUserId=null):Collection{
+      return Schedule::whereHas('service', function ($q) use ($freelancerId, $companyUserId) {
+            if ($freelancerId) {
+                $q->whereNull('company_id')
+                  ->where('freelancer_id', $freelancerId);
+            }
+
+            if ($companyUserId) {
+                $q->whereNull('freelancer_id')
+                  ->whereHas('company', function ($q2) use ($companyUserId) {
+                      $q2->where('user_id', $companyUserId);
+                  });
+            }
+        })
+        ->get();
     }
 }

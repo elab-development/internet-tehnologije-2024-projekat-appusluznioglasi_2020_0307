@@ -16,5 +16,9 @@ Route::middleware('auth:sanctum')->group(function () {
 Route::resource('/companies', CompanyController::class);
 Route::resource('/services', ServiceController::class);
 Route::resource('/schedules', ScheduleController::class);
-
+Route::post('/schedules/date', [ScheduleController::class,'showForDate']);
+Route::post('/schedules/date', [ScheduleController::class,'showForDateForServiceName']);
+Route::post('/schedules/date/user', [ScheduleController::class,'showForDateForUser']);
+Route::post('/schedules/user', [ScheduleController::class,'showForUser']);
 });
+
