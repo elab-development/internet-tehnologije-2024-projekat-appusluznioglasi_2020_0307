@@ -14,9 +14,9 @@ class AuthController extends Controller
 {
     protected UserService $authService;
     protected CompanyService $companyService;
-    public function __construct(UserService $authService){
+    public function __construct(UserService $authService,CompanyService $companyService){
         $this->authService = $authService;
-        $this->companyService = new CompanyService();
+        $this->companyService =$companyService;
     }
     public function login(Request $request){
         $validator=Validator::make($request->only('email','password'),[

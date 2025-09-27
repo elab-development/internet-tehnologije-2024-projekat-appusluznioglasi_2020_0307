@@ -12,7 +12,7 @@ Route::get('/user', function (Request $request) {
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 Route::middleware('auth:sanctum')->group(function () {
-    Route::resource('/companies', CompanyController::class);
-    Route::resource('/services', ServiceController::class);
+Route::resource('/companies', CompanyController::class);
+Route::resource('/services', ServiceController::class);
 
 });
