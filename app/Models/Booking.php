@@ -18,10 +18,10 @@ class Booking extends Model
     }
 
     // Booking pripada servisu
-    public function service()
+   /* public function service()
     {
         return $this->belongsTo(Service::class);
-    }
+    }*/
 
     // Booking pripada rasporedu
     public function schedule()
