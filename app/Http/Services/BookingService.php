@@ -2,6 +2,7 @@
 
 namespace App\Http\Services;
 
+use App\Models\Booking;
 use App\Models\Service;
 use App\Models\User;
 use Exception;
@@ -9,25 +10,35 @@ use Exception;
 class BookingService
 {
 
-    public function addBooking(array $data,User $user): Service
+    public function addBooking(array $data): Booking
     {
-        $attributes = [
-            'title' => $data['title'],
-            'description' => $data['description'] ?? null,
-            'price' => $data['price'],
-            'max_employees' => $data['max_employees'] ?? 1,
-        ];
-
-        if ($user->role === 'freelancer') {
-            $attributes['freelancer_id'] = $user->id;
-        } elseif ($user->role === 'company') {
-            $attributes['company_id'] = $user->id;
-        } else {
-            throw new Exception('Ovaj tip korisnika ne može da dodaje usluge.');
-        }
-
-        return Service::create($attributes);
+        return Booking::create(
+            [
+                'user_id' => $data['user_id'],
+                'schedule_id' => $data['schedule_id'],
+                'status' => $data['status']??'pending',
+            ]
+        );
     }
-    
-   
+    public function updateBooking(Booking $booking, array $data): Booking{
+        $booking->update($data);
+        return $booking;
+    }
+    public function deleteBooking(Booking $booking): bool{
+        return $booking->delete();
+    }
+    public function getBookingById( $bookingId): Booking{
+        return Booking::where('id',$bookingId);
+    }
+    public function getBookingByScheduleId( $scheduleId): Booking{
+        return Booking::where('schedule_id',$scheduleId);
+    }
+    public function getBookingByUserId( $userId): Booking{
+        return Booking::where('user',function ($query) use ($userId){
+            $query->where('id',$userId);
+        });
+    }
+
+
+
 }

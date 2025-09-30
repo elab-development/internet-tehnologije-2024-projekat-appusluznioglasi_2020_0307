@@ -1,0 +1,89 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Http\Resources\BookingResource;
+use App\Http\Services\BookingService;
+use App\Models\Booking;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
+
+class BookingController extends Controller
+{
+    protected BookingService $bookingService;
+    public function __construct(BookingService $bookingService){
+        $this->bookingService = $bookingService;
+    }
+    /**
+     * Display a listing of the resource.
+     */
+    public function index()
+    {
+        $bookings = Booking::all();
+        return BookingResource::collection($bookings);
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     */
+    public function create()
+    {
+        //
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function store(Request $request)
+    {
+        $validator=Validator::make($request->all(),[
+            'user_id'=>'required',
+            'schedule_id'=>'required',
+        ]);
+        if($validator->fails()){
+            return response()->json($validator->errors()->toJson(),400);
+        }
+        $booking =$this->bookingService->addBooking($request->toArray());
+        return response()->json(['booking'=>new BookingResource($booking),'message'=>'Booking created successfully'],201);
+    }
+
+    /**
+     * Display the specified resource.
+     */
+    public function show(Booking $booking)
+    {
+        return new BookingResource($booking);
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit(Booking $booking)
+    {
+        //
+    }
+
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(Request $request, Booking $booking)
+    {
+        $validator=Validator::make($request->all(),[
+            'user_id'=>'required',
+            'schedule_id'=>'required',
+        ]);
+        if($validator->fails()){
+            return response()->json($validator->errors()->toJson(),400);
+        }
+        $bookingUpdated =$this->bookingService->updateBooking($booking,$request->toArray(),);
+        return response()->json(['booking'=>new BookingResource($bookingUpdated),'message'=>'Booking updated successfully'],201);
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(Booking $booking)
+    {
+        $this->bookingService->deleteBooking($booking);
+    }
+}
