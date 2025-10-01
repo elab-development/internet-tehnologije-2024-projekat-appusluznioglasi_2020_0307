@@ -6,6 +6,7 @@ use App\Http\Resources\BookingResource;
 use App\Http\Services\BookingService;
 use App\Models\Booking;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 class BookingController extends Controller
@@ -75,7 +76,7 @@ class BookingController extends Controller
         if($validator->fails()){
             return response()->json($validator->errors()->toJson(),400);
         }
-        $bookingUpdated =$this->bookingService->updateBooking($booking,$request->toArray(),);
+        $bookingUpdated =$this->bookingService->updateBooking($booking,$request->toArray());
         return response()->json(['booking'=>new BookingResource($bookingUpdated),'message'=>'Booking updated successfully'],201);
     }
 
@@ -86,4 +87,20 @@ class BookingController extends Controller
     {
         $this->bookingService->deleteBooking($booking);
     }
+
+
+    public function getAllBookingsForCurrentUser(Request $request)
+    {
+        $userId = $request->user()->id;
+        $bookings=$this->bookingService->getBookingByUserId($userId);
+        return response()->json(['bookings'=>$bookings,'message'=>"All booking for retrieved successfully"],201);
+    }
+    public function getAllBookingsForSchedule(Request $request)
+    {
+        $scheduleId=$request->schedule_id;
+        $bookings=$this->bookingService->getBookingByScheduleId($scheduleId);
+        return response()->json(['bookings'=>$bookings,'message'=>"All booking for retrieved successfully"],201);
+
+    }
+
 }

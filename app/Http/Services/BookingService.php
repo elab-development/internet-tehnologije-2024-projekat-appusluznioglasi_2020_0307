@@ -27,13 +27,11 @@ class BookingService
     public function deleteBooking(Booking $booking): bool{
         return $booking->delete();
     }
-    public function getBookingById( $bookingId): Booking{
-        return Booking::where('id',$bookingId);
-    }
+  
     public function getBookingByScheduleId( $scheduleId): Booking{
         return Booking::where('schedule_id',$scheduleId);
     }
-    public function getBookingByUserId( $userId): Booking{
+    public function getBookingByUserId($userId): Booking{
         return Booking::where('user',function ($query) use ($userId){
             $query->where('id',$userId);
         });
