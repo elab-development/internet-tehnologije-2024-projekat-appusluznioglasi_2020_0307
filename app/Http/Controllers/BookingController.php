@@ -43,13 +43,14 @@ class BookingController extends Controller
     public function store(Request $request)
     {
         $validator=Validator::make($request->all(),[
-            'user_id'=>'required',
+        
             'schedule_id'=>'required',
         ]);
         if($validator->fails()){
             return response()->json($validator->errors()->toJson(),400);
         }
-        $booking =$this->bookingService->addBooking($request->toArray());
+        $userId = $request->user()->id;
+        $booking =$this->bookingService->addBooking($request->toArray(), $userId);
         return response()->json(['booking'=>new BookingResource($booking),'message'=>'Booking created successfully'],201);
     }
 

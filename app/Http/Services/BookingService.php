@@ -12,11 +12,11 @@ use function Pest\Laravel\get;
 class BookingService
 {
 
-    public function addBooking(array $data): Booking
+    public function addBooking(array $data,$userId): Booking
     {
         return Booking::create(
             [
-                'user_id' => $data['user_id'],
+                'user_id' => $userId,
                 'schedule_id' => $data['schedule_id'],
                 'status' => $data['status']??'pending',
             ]
