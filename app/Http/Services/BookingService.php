@@ -30,8 +30,8 @@ class BookingService
         return $booking->delete();
     }
 
-    public function getBookingsByScheduleId( $scheduleId): Collection{
-        return Booking::where('schedule_id',$scheduleId)->get();
+    public function getBookingsByScheduleId( $scheduleId): Booking{
+        return Booking::where('schedule_id',$scheduleId)->firstOrFail();
     }
     public function getBookingsByUserId($userId): Collection{
         return Booking::where('user_id',$userId)->get();
@@ -57,7 +57,5 @@ class BookingService
 
 
     }
-
-
 
 }

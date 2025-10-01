@@ -49,6 +49,9 @@ class BookingController extends Controller
         if($validator->fails()){
             return response()->json($validator->errors()->toJson(),400);
         }
+        if($this->bookingService->getBookingsByScheduleId($request->schedule_id)){
+            return response()->json(['message'=> 'This schedule is already booked.'],400);
+        }
         $userId = $request->user()->id;
         $booking =$this->bookingService->addBooking($request->toArray(), $userId);
         return response()->json(['booking'=>new BookingResource($booking),'message'=>'Booking created successfully'],201);

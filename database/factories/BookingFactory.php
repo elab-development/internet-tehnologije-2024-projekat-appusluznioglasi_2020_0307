@@ -23,9 +23,20 @@ class BookingFactory extends Factory
 
     public function definition(): array
     {
+            static $freeSchedules;
+
+        if ($freeSchedules === null) {
+            $freeSchedules = Schedule::pluck('id')->toArray();
+        }
+
+        if (empty($freeSchedules)) {
+            throw new \Exception("Nema više slobodnih schedule-ova.");
+        }
+
+        $scheduleId = array_pop($freeSchedules);
         return [
             'user_id' => User::inRandomOrder()->first()->id,
-            'schedule_id' => Schedule::inRandomOrder()->first()->id,
+            'schedule_id' => $scheduleId,
             'status'=>$this->faker->randomElement(['pending','confirmed','done','canceled']),
         ];
     }

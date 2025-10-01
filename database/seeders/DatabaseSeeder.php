@@ -23,7 +23,7 @@ class DatabaseSeeder extends Seeder
         Service::factory()->forCompany()->count(10)->create();
         Service::factory()->forFreelancer()->count(10)->create();
         Schedule::factory()->count(10)->create();
-        Booking::factory()->count(40)->create();
+        Booking::factory()->count(10)->create();
         Review::factory()->count(40)->create();
     }
 }

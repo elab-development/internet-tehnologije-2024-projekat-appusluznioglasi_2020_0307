@@ -17,9 +17,9 @@ class Schedule extends Model
         return $this->belongsTo(Service::class);
     }
 
-    // Schedule ima više booking-a
-    public function bookings()
+   
+    public function booking()
     {
-        return $this->hasMany(Booking::class);
+        return $this->hasOne(Booking::class);
     }
 }
