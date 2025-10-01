@@ -16,19 +16,25 @@ Route::post('/login', [AuthController::class, 'login']);
 Route::middleware('auth:sanctum')->group(function () {
 Route::resource('/companies', CompanyController::class);
 Route::resource('/services', ServiceController::class);
-Route::resource('/schedules', ScheduleController::class);
-Route::post('/schedules/date', [ScheduleController::class,'showForDate']);
+Route::get('/schedules', [ScheduleController::class,'index']);
+Route::get('/schedules/{id}', [ScheduleController::class,'show']);
+Route::put('/schedules', [ScheduleController::class,'update']);
+Route::delete('/schedules/{id}', [ScheduleController::class,'destroy']);
+
+
+
+    Route::post('/schedules/date', [ScheduleController::class,'showForDate']);
 Route::post('/schedules/date', [ScheduleController::class,'showForDateForServiceName']);
 Route::post('/schedules/date/user', [ScheduleController::class,'showForDateForUser']);
-Route::post('/schedules/user', [ScheduleController::class,'showForUser']);
+Route::get('/schedules/user', [ScheduleController::class,'showForUser']);
 Route::post("/bookings/create", [BookingController::class,'store']);
 Route::put("/bookings/update", [BookingController::class,'update']);
 Route::delete("/bookings/delete", [BookingController::class,'destroy']);
 Route::get("/bookings/show", [BookingController::class,'show']);
 Route::get("/bookings/showByScheduleId", [BookingController::class,'getAllBookingsForSchedule']);
     Route::get("/bookings/showForUserId", [BookingController::class,'getAllBookingsForCurrentUser']);
-    Route::get("/bookings/", [BookingController::class,'index']);
-    Route::get("/bookings/status/", [BookingController::class,'getAllBookingsForUserForStatus']);
+    Route::get("/bookings/{id}", [BookingController::class,'index']);
+    Route::get("/bookings/status/{status}", [BookingController::class,'getAllBookingsForUserForStatus']);
 
 
 });

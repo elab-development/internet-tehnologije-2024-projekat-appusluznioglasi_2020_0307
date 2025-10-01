@@ -92,21 +92,21 @@ class BookingController extends Controller
     public function getAllBookingsForCurrentUser(Request $request)
     {
         $userId = $request->user()->id;
-        $bookings=$this->bookingService->getBookingByUserId($userId);
-        return response()->json(['bookings'=>$bookings,'message'=>"All booking for retrieved successfully"],201);
+        $bookings=$this->bookingService->getBookingsByUserId($userId);
+        return response()->json(['bookings'=>BookingResource::collection($bookings),'message'=>"All booking for retrieved successfully"],201);
     }
     public function getAllBookingsForSchedule(Request $request)
     {
         $scheduleId=$request->schedule_id;
-        $bookings=$this->bookingService->getBookingByScheduleId($scheduleId);
-        return response()->json(['bookings'=>$bookings,'message'=>"All booking for retrieved successfully"],201);
+        $bookings=$this->bookingService->getBookingsByScheduleId($scheduleId);
+        return response()->json(['bookings'=>BookingResource::collection($bookings),'message'=>"All booking for retrieved successfully"],201);
 
     }
     public function getAllBookingsForUserForStatus(Request $request){
-        $userId = $request->user()->id;
+        $user = $request->user();
         $status=$request->status;
-        $bookings=$this->bookingService->getBookingsByStatusForUserId($status,$userId);
-        return response()->json(['bookings'=>$bookings,'message'=>"All booking for  status ${status} retrieved successfully"],201);
+        $bookings=$this->bookingService->getBookingsByStatusForUserId($status,$user);
+        return response()->json(['bookings'=> BookingResource::collection($bookings),'message'=>"All booking for  status ${status} retrieved successfully"],201);
     }
 
 }

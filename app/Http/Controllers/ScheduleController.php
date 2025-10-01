@@ -6,7 +6,7 @@ use App\Http\Resources\ScheduleResource;
 use App\Http\Services\ScheduleService;
 use App\Models\Schedule;
 use Illuminate\Http\Request;
-use Validator;
+use Illuminate\Support\Facades\Validator;
 
 class ScheduleController extends Controller
 {
@@ -19,7 +19,7 @@ class ScheduleController extends Controller
      */
     public function index()
     {
-        
+
         $schedule = Schedule::all();
         return ScheduleResource::collection($schedule);
     }
@@ -68,7 +68,7 @@ class ScheduleController extends Controller
     {
         $date=$request->input('date');
         $title=$request->input('title');
-      
+
         $schedules=$this->scheduleService->getAllSchedulesForDateAndTitle($date,$title);
         return response()->json(["schedules"=>ScheduleResource::collection($schedules)],200);
     }
@@ -83,22 +83,22 @@ class ScheduleController extends Controller
                 $schedules=$this->scheduleService->getAllSchedulesForDateAndUser($date,freelancerId: $user->id);
 
         }
-      
+
         return response()->json(["schedules"=>ScheduleResource::collection($schedules)],200);
     }
       public function showForUser(Request $request)
     {
-    
+
         $user=$request->user();
         if($user->role=='company'){
-                    $schedules=$this->scheduleService->getAllSchedulesForUser(companyUserId:$user->id);
-
-        }else{
-                $schedules=$this->scheduleService->getAllSchedulesForUser(freelancerId: $user->id);
+                    $schedules=$this->scheduleService->getAllSchedulesForUser(companyUserId:$user->id,freelancerId: null);
 
         }
-      
-        return response()->json(["schedules"=>ScheduleResource::collection($schedules)],200);
+        if ($user->role=='freelancer'){
+            $schedules=$this->scheduleService->getAllSchedulesForUser(freelancerId: $user->id,companyUserId: null);
+        }
+
+        return response()->json(["schedules"=>ScheduleResource::collection($schedules),'message'=>"Schedules founded successfully"],200);
     }
 
 
@@ -115,7 +115,18 @@ class ScheduleController extends Controller
      */
     public function update(Request $request, Schedule $schedule)
     {
-        //
+        $validator=Validator::make($request->all(),[
+            'date' => ['required', 'date_format:Y-m-d', 'after_or_equal:today'],
+            'time_from' => ['required', 'date_format:H:i'],
+            'time_to'   => ['required', 'date_format:H:i','after:time_from'],
+            'assigned_employees'=> ['integer'],
+            'service_id'=>['required'],
+        ]);
+        if($validator->fails()){
+            return response()->json($validator->errors(),400);
+        }
+        $schedule=$this->scheduleService->updateSchedule($schedule,$request->toArray());
+        return response()->json(['schedule'=>new ScheduleResource($schedule),'message'=>"Schedule updated successfully"]);
     }
 
     /**
@@ -123,6 +134,7 @@ class ScheduleController extends Controller
      */
     public function destroy(Schedule $schedule)
     {
-        //
+        $this->scheduleService->deleteSchedule($schedule);
+        return response()->json(["message"=>"Schedule deleted successfully"],200);
     }
 }

@@ -18,14 +18,14 @@ class ScheduleService
             'time_from' => $data['time_from'] ,
             'time_to' => $data['time_to'] ,
             'service_id' => $data['service_id'] ,
-            'assigned_employees' => $data['assigned_employees']??1 
+            'assigned_employees' => $data['assigned_employees']??1
         ]);
 
         return $schedule;
 
-       
 
-    } 
+
+    }
     public function updateSchedule(Schedule $schedule, array $data): Schedule{
         $schedule->update($data);
         return $schedule;
@@ -61,17 +61,15 @@ class ScheduleService
             }
         })
         ->get();
-    } 
+    }
     public function getAllSchedulesForUser($freelancerId=null,$companyUserId=null):Collection{
       return Schedule::whereHas('service', function ($q) use ($freelancerId, $companyUserId) {
             if ($freelancerId) {
-                $q->whereNull('company_id')
-                  ->where('freelancer_id', $freelancerId);
+                $q->where('freelancer_id', $freelancerId);
             }
 
             if ($companyUserId) {
-                $q->whereNull('freelancer_id')
-                  ->whereHas('company', function ($q2) use ($companyUserId) {
+                $q->whereHas('company', function ($q2) use ($companyUserId) {
                       $q2->where('user_id', $companyUserId);
                   });
             }

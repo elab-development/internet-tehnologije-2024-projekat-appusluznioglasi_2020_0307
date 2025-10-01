@@ -16,8 +16,8 @@ class ScheduleResource extends JsonResource
     {
         return [
             'id'=>$this->id,
-            'service'=>new ServiceResource($this->service)
-            ,'time_from'=>$this->time_from,
+            'service'=>new ServiceResource($this->service),
+            'time_from'=>$this->time_from,
             'time_to'=>$this->time_to,
             'date'=>$this->date,
             'employees_assigned'=>$this->assigned_employees

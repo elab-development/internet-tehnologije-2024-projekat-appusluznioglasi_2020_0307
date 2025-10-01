@@ -24,8 +24,8 @@ class BookingFactory extends Factory
     public function definition(): array
     {
         return [
-            'user_id' => User::factory(),
-            'schedule_id'=>Schedule::factory(),
+            'user_id' => User::inRandomOrder()->first()->id,
+            'schedule_id' => Schedule::inRandomOrder()->first()->id,
             'status'=>$this->faker->randomElement(['pending','confirmed','done','canceled']),
         ];
     }

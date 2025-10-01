@@ -6,6 +6,8 @@ use App\Models\Booking;
 use App\Models\Service;
 use App\Models\User;
 use Exception;
+use Illuminate\Database\Eloquent\Collection;
+use function Pest\Laravel\get;
 
 class BookingService
 {
@@ -28,15 +30,13 @@ class BookingService
         return $booking->delete();
     }
 
-    public function getBookingByScheduleId( $scheduleId): Booking{
-        return Booking::where('schedule_id',$scheduleId);
+    public function getBookingsByScheduleId( $scheduleId): Collection{
+        return Booking::where('schedule_id',$scheduleId)->get();
     }
-    public function getBookingByUserId($userId): Booking{
-        return Booking::where('user',function ($query) use ($userId){
-            $query->where('id',$userId);
-        });
+    public function getBookingsByUserId($userId): Collection{
+        return Booking::where('user_id',$userId)->get();
     }
-    public function getBookingsByStatusForUserId($status,User $user): Booking{
+    public function getBookingsByStatusForUserId($status,User $user): Collection{
         if($user->role == 'user'){
             return Booking::where('status',$status)
                 ->where('user_id',$user->id)->get();
