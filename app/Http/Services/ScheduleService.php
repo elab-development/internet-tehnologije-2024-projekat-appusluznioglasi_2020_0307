@@ -32,7 +32,7 @@ class ScheduleService
 
     }
     public function deleteSchedule(Schedule $schedule): bool{
-       return $$schedule->delete();
+       return $schedule->delete();
     }
     public function getAllSchedulesForDate($date):Collection{
       $schedules = Schedule::where('date', $date)->get();

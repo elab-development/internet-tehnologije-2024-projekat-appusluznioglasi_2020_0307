@@ -18,9 +18,9 @@ Route::middleware('auth:sanctum')->group(function () {
 Route::resource('/companies', CompanyController::class);
 Route::resource('/services', ServiceController::class);
 Route::get('/schedules', [ScheduleController::class,'index']);
-Route::get('/schedules/{id}', [ScheduleController::class,'show']);
-Route::put('/schedules', [ScheduleController::class,'update']);
-Route::delete('/schedules/{id}', [ScheduleController::class,'destroy']);
+Route::get('/schedules/{schedule}', [ScheduleController::class,'show']);
+Route::put('/schedules/{schedule}', [ScheduleController::class,'update']);
+Route::delete('/schedules/{schedule}', [ScheduleController::class,'destroy']);
 
 
 
