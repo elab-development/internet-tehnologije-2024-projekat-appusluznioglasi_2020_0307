@@ -27,7 +27,7 @@ class BookingService
     public function deleteBooking(Booking $booking): bool{
         return $booking->delete();
     }
-  
+
     public function getBookingByScheduleId( $scheduleId): Booking{
         return Booking::where('schedule_id',$scheduleId);
     }
@@ -35,6 +35,27 @@ class BookingService
         return Booking::where('user',function ($query) use ($userId){
             $query->where('id',$userId);
         });
+    }
+    public function getBookingsByStatusForUserId($status,User $user): Booking{
+        if($user->role == 'user'){
+            return Booking::where('status',$status)
+                ->where('user_id',$user->id)->get();
+        }
+        if ($user->role === 'company') {
+            return Booking::where('status', $status)
+                ->whereHas('schedule.service', function ($query) use ($user) {
+                    $query->where('company_id', $user->id);
+                })
+                ->get();
+        }
+
+        return Booking::where('status', $status)
+                ->whereHas('schedule.service', function ($query) use ($user) {
+                    $query->where('freelancer_id', $user->id);
+                })
+                ->get();
+
+
     }
 
 

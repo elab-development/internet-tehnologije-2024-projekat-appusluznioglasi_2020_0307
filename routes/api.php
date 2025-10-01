@@ -28,6 +28,7 @@ Route::get("/bookings/show", [BookingController::class,'show']);
 Route::get("/bookings/showByScheduleId", [BookingController::class,'getAllBookingsForSchedule']);
     Route::get("/bookings/showForUserId", [BookingController::class,'getAllBookingsForCurrentUser']);
     Route::get("/bookings/", [BookingController::class,'index']);
+    Route::get("/bookings/status/", [BookingController::class,'getAllBookingsForUserForStatus']);
 
 
 });

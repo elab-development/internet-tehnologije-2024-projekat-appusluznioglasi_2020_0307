@@ -102,5 +102,11 @@ class BookingController extends Controller
         return response()->json(['bookings'=>$bookings,'message'=>"All booking for retrieved successfully"],201);
 
     }
+    public function getAllBookingsForUserForStatus(Request $request){
+        $userId = $request->user()->id;
+        $status=$request->status;
+        $bookings=$this->bookingService->getBookingsByStatusForUserId($status,$userId);
+        return response()->json(['bookings'=>$bookings,'message'=>"All booking for  status ${status} retrieved successfully"],201);
+    }
 
 }
