@@ -18,9 +18,14 @@ class BookingController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $bookings = Booking::all();
+        $status = $request->status;
+        $bookings = Booking::query()
+            ->when($status, function ($query, $status) {
+                $query->where('status', $status);
+            })
+            ->paginate(5);
         return BookingResource::collection($bookings);
     }
 

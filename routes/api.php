@@ -35,6 +35,7 @@ Route::get("/bookings/showByScheduleId", [BookingController::class,'getAllBookin
     Route::get("/bookings/showForUserId", [BookingController::class,'getAllBookingsForCurrentUser']);
     Route::get("/bookings/{id}", [BookingController::class,'index']);
     Route::get("/bookings/status/{status}", [BookingController::class,'getAllBookingsForUserForStatus']);
+    Route::get("/bookings",[BookingController::class,'index']);
 
 
 });
