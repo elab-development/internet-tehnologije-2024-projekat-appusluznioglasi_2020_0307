@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\CompanyController;
+use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\ScheduleController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -36,6 +37,9 @@ Route::get("/bookings/showByScheduleId", [BookingController::class,'getAllBookin
     Route::get("/bookings/{id}", [BookingController::class,'index']);
     Route::get("/bookings/status/{status}", [BookingController::class,'getAllBookingsForUserForStatus']);
     Route::get("/bookings",[BookingController::class,'index']);
+    Route::post("/reviews", [ReviewController::class,"store"]);
+    Route::get("/reviews/company/{company_id}",[ReviewController::class,'getReviewsForCompany']);
+    Route::get("/reviews/freelancer/{freelancer_id}",[ReviewController::class,'getReviewsForFreelancer']);
 
 
 });
