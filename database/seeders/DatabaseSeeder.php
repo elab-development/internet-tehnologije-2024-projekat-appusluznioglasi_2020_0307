@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Booking;
+use App\Models\Review;
 use App\Models\Schedule;
 use App\Models\Service;
 use App\Models\User;
@@ -23,5 +24,6 @@ class DatabaseSeeder extends Seeder
         Service::factory()->forFreelancer()->count(10)->create();
         Schedule::factory()->count(10)->create();
         Booking::factory()->count(40)->create();
+        Review::factory()->count(40)->create();
     }
 }
