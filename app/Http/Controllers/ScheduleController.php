@@ -117,16 +117,7 @@ class ScheduleController extends Controller
      */
     public function update(Request $request, Schedule $schedule)
     {
-        $validator=Validator::make($request->all(),[
-            'date' => ['required', 'date_format:Y-m-d', 'after_or_equal:today'],
-            'time_from' => ['required', 'date_format:H:i'],
-            'time_to'   => ['required', 'date_format:H:i','after:time_from'],
-            'assigned_employees'=> ['integer'],
-            'service_id'=>['required'],
-        ]);
-        if($validator->fails()){
-            return response()->json($validator->errors(),400);
-        }
+
         $schedule=$this->scheduleService->updateSchedule($schedule,$request->toArray());
         return response()->json(['schedule'=>new ScheduleResource($schedule),'message'=>"Schedule updated successfully"]);
     }
