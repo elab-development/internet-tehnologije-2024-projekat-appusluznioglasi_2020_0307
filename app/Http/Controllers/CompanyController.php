@@ -10,15 +10,12 @@ use Illuminate\Support\Facades\Validator;
 
 class CompanyController extends Controller
 {
-
     protected  CompanyService $service;
 
     public function __construct(CompanyService $service){
         $this->service = $service;
     }
-    /**
-     * Display a listing of the resource.
-     */
+ 
     public function index()
     {
         $companies = Company::all();
@@ -51,9 +48,6 @@ class CompanyController extends Controller
         return response()->json(['data'=>new CompanyResource($company),'message'=>"Company added successfully"],201);
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(Company $company)
     {
         return new CompanyResource($company);
@@ -84,9 +78,6 @@ class CompanyController extends Controller
         return response()->json(['data'=>new CompanyResource($updated),'message'=>"Company updated successfully"],201);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(Company $company)
     {
          $this->service->deleteCompany($company);

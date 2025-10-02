@@ -15,9 +15,6 @@ class BookingController extends Controller
     public function __construct(BookingService $bookingService){
         $this->bookingService = $bookingService;
     }
-    /**
-     * Display a listing of the resource.
-     */
     public function index(Request $request)
     {
         $status = $request->status;
@@ -57,9 +54,6 @@ class BookingController extends Controller
         return response()->json(['booking'=>new BookingResource($booking),'message'=>'Booking created successfully'],201);
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(Booking $booking)
     {
         return new BookingResource($booking);
@@ -88,10 +82,6 @@ class BookingController extends Controller
         $bookingUpdated =$this->bookingService->updateBooking($booking,$request->toArray());
         return response()->json(['booking'=>new BookingResource($bookingUpdated),'message'=>'Booking updated successfully'],201);
     }
-
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(Booking $booking)
     {
         $this->bookingService->deleteBooking($booking);

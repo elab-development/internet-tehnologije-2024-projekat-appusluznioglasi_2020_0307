@@ -10,31 +10,24 @@ use Illuminate\Support\Facades\Validator;
 
 class ServiceController extends Controller
 {
-
     protected ServiceService $serviceService;
     public function __construct(ServiceService $service){
         $this->serviceService=$service;
     }
-    /**
-     * Display a listing of the resource.
-     */
+   
     public function index()
     {
         $services = Service::all();
         return  ServiceResource::collection($services);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
+
     public function create()
     {
         //
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
+
     public function store(Request $request)
     {
         $validator=Validator::make($request->all(),[
@@ -48,10 +41,6 @@ class ServiceController extends Controller
         $service=$this->serviceService->addService($request->toArray(),$request->user());
         return response()->json(['data'=>new ServiceResource($service),'message'=>"Service added successfully"],201);
     }
-
-    /**
-     * Display the specified resource.
-     */
     public function show(Service $service)
     {
         return new ServiceResource($service);
@@ -82,9 +71,6 @@ class ServiceController extends Controller
         return response()->json(['data'=>new ServiceResource($updated),'message'=>"Service updated successfully"],201);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(Service $service)
     {
         $this->serviceService->deleteService($service);

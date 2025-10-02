@@ -14,9 +14,6 @@ class ScheduleController extends Controller
     public function __construct(ScheduleService $scheduleService){
         $this->scheduleService = $scheduleService;
     }
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
 
@@ -60,10 +57,6 @@ class ScheduleController extends Controller
        $schedule=$this->scheduleService->addSchedule($request->toArray());
        return response()->json(['schedule'=>new ScheduleResource($schedule),'message'=>"Schedule added successfully"],201);
     }
-
-    /**
-     * Display the specified resource.
-     */
     public function show(Schedule $schedule)
     {
         return new ScheduleResource($schedule);
@@ -99,7 +92,6 @@ class ScheduleController extends Controller
     public function showForUser(Request $request)
     {
         $schedules = collect();
-
         $user=$request->user();
         if($user->role=='company'){
                     $schedules=$this->scheduleService->getAllSchedulesForUser(companyUserId:$user->id,freelancerId: null);
@@ -108,7 +100,6 @@ class ScheduleController extends Controller
         if ($user->role=='freelancer'){
             $schedules=$this->scheduleService->getAllSchedulesForUser(freelancerId: $user->id,companyUserId: null);
         }
-
         return response()->json(["schedules"=>ScheduleResource::collection($schedules),'message'=>"Schedules founded successfully"],200);
     }
 
@@ -140,9 +131,6 @@ class ScheduleController extends Controller
         return response()->json(['schedule'=>new ScheduleResource($schedule),'message'=>"Schedule updated successfully"]);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(Schedule $schedule)
     {
         $this->scheduleService->deleteSchedule($schedule);

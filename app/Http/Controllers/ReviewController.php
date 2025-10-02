@@ -12,12 +12,10 @@ use Illuminate\Support\Facades\Auth;
 
 class ReviewController extends Controller
 {
-
     protected ReviewService $reviewService;
     public function __construct(ReviewService $reviewService){
         $this->reviewService = $reviewService;
     }
-    
     public function index()
     {
        
