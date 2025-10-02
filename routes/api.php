@@ -59,10 +59,10 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::delete('/schedules/{schedule}', [ScheduleController::class, 'destroy']);
     Route::put('/schedules/{schedule}', [ScheduleController::class, 'update']);
     Route::get("/bookings/status/{status}", [BookingController::class, 'getAllBookingsForUserForStatus']);
-    Route::get("/bookings/show", [BookingController::class, 'show']);
+    Route::get("/bookings/show", [BookingController::class, 'index']);
     Route::get("/bookings/showByScheduleId", [BookingController::class, 'getBookingByScheduleId']);
     Route::get("/bookings/showForUserId", [BookingController::class, 'getAllBookingsForCurrentUser']);
-    Route::get("/bookings/{booking}", [BookingController::class, 'index']);
+    Route::get("/bookings/{booking}", [BookingController::class, 'show']);
     Route::get("/reviews/company/{company_id}", [ReviewController::class, 'getReviewsForCompany']);
     Route::get("/reviews/freelancer/{freelancer_id}", [ReviewController::class, 'getReviewsForFreelancer']);
 });
