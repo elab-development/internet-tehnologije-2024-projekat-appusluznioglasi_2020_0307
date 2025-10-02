@@ -17,7 +17,7 @@ Route::post('/login', [AuthController::class, 'login']);
 Route::middleware(['auth:sanctum','role:user'])->group(function () {
 
 Route::get('/schedules', [ScheduleController::class,'showAllSchedules']);
-Route::get('/schedules/title', [ScheduleController::class,'showAllSchedulesForServiceTitle']);
+Route::get('/schedules/title/{title}', [ScheduleController::class,'showAllSchedulesForServiceTitle']);
 Route::get('/schedules/show/{schedule}', [ScheduleController::class,'show']);
 
 Route::post('/schedules/date', [ScheduleController::class,'showForDate']);
