@@ -89,9 +89,13 @@ class ScheduleService
         $today = Carbon::today()->toDateString();
         $nowTime = Carbon::now()->toTimeString();
 
-        return Schedule::where('date' === $today, function ($q) use ($nowTime) {
-                $q->where('time_from', '>', $nowTime);
-            })
+        return Schedule::where(function ($query) use ($today, $nowTime) {
+            $query->where('date', '>', $today)
+                ->orWhere(function ($q) use ($today, $nowTime) {
+                    $q->where('date', $today)
+                        ->where('time_from', '>', $nowTime);
+                });
+        })
             ->whereDoesntHave('booking', function ($q) {
                 $q->whereIn('status', ['pending', 'accepted']);
             })

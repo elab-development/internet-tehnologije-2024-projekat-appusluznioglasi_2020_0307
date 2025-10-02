@@ -20,7 +20,7 @@ class ScheduleFactory extends Factory
     public function definition(): array
     {
         return [
-            'date' => $this->faker->date(),
+            'date' =>  $this->faker->dateTimeBetween('now', '+1 year')->format('Y-m-d'),
             'time_from' => $this->faker->time(),
             'time_to' => $this->faker->time(),
             'service_id' =>Service::inRandomOrder()->first()->id,

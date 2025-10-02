@@ -43,6 +43,7 @@ class AuthController extends Controller
             'company_name' => 'required_if:role,company|string|max:255',
             'description' => 'nullable|string',
             'badge_verified' => 'boolean',
+            'role'=>"required|string",
         ]);
         if($validator->fails()){
             return response()->json($validator->errors()->toJson(),400);
