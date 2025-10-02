@@ -43,8 +43,8 @@ Route::middleware(['auth:sanctum','role:company,freelancer'])->group(function ()
     Route::put('/services/{service}', [ServiceController::class,'update']);
     Route::delete('/services/{service}', [ServiceController::class,'destroy']);
     Route::post('/schedules/date/user', [ScheduleController::class, 'showForDateForUser']);
-    Route::put("/bookings/update", [BookingController::class, 'update']);
-    Route::delete("/bookings/delete", [BookingController::class, 'destroy']);
+    Route::put("/bookings/update/{booking}", [BookingController::class, 'update']);
+    Route::delete("/bookings/delete/{booking}", [BookingController::class, 'destroy']);
 
 });
 
@@ -62,7 +62,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get("/bookings/show", [BookingController::class, 'show']);
     Route::get("/bookings/showByScheduleId", [BookingController::class, 'getBookingByScheduleId']);
     Route::get("/bookings/showForUserId", [BookingController::class, 'getAllBookingsForCurrentUser']);
-    Route::get("/bookings/{id}", [BookingController::class, 'index']);
+    Route::get("/bookings/{booking}", [BookingController::class, 'index']);
     Route::get("/reviews/company/{company_id}", [ReviewController::class, 'getReviewsForCompany']);
     Route::get("/reviews/freelancer/{freelancer_id}", [ReviewController::class, 'getReviewsForFreelancer']);
 });

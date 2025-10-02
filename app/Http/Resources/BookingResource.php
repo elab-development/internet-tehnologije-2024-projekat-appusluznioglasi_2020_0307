@@ -18,7 +18,7 @@ class BookingResource extends JsonResource
             'id'=>$this->id,
             'client'=>new UserResource($this->user),
             'schedule'=>new ScheduleResource($this->schedule),
-            'service'=>new ServiceResource($this->service)
+            'status'=>$this->status
         ];
     }
 

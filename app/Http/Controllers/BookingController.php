@@ -89,6 +89,7 @@ class BookingController extends Controller
     public function destroy(Booking $booking)
     {
         $this->bookingService->deleteBooking($booking);
+        return response()->json(['message'=>'Booking deleted successfully'],201);
     }
 
 
