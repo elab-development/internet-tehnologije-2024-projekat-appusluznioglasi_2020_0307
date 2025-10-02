@@ -43,13 +43,13 @@ class BookingController extends Controller
     public function store(Request $request)
     {
         $validator=Validator::make($request->all(),[
-        
+
             'schedule_id'=>'required',
         ]);
         if($validator->fails()){
             return response()->json($validator->errors()->toJson(),400);
         }
-        if($this->bookingService->getBookingsByScheduleId($request->schedule_id)){
+        if($this->bookingService->getBookingsByScheduleId($request->schedule_id)!=null){
             return response()->json(['message'=> 'This schedule is already booked.'],400);
         }
         $userId = $request->user()->id;
@@ -78,13 +78,7 @@ class BookingController extends Controller
      */
     public function update(Request $request, Booking $booking)
     {
-        $validator=Validator::make($request->all(),[
-            'user_id'=>'required',
-            'schedule_id'=>'required',
-        ]);
-        if($validator->fails()){
-            return response()->json($validator->errors()->toJson(),400);
-        }
+
         $bookingUpdated =$this->bookingService->updateBooking($booking,$request->toArray());
         return response()->json(['booking'=>new BookingResource($bookingUpdated),'message'=>'Booking updated successfully'],201);
     }
