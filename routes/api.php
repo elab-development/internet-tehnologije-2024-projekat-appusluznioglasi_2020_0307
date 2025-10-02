@@ -60,7 +60,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('/schedules/{schedule}', [ScheduleController::class, 'update']);
     Route::get("/bookings/status/{status}", [BookingController::class, 'getAllBookingsForUserForStatus']);
     Route::get("/bookings/show", [BookingController::class, 'show']);
-    Route::get("/bookings/showByScheduleId", [BookingController::class, 'getAllBookingsForSchedule']);
+    Route::get("/bookings/showByScheduleId", [BookingController::class, 'getBookingByScheduleId']);
     Route::get("/bookings/showForUserId", [BookingController::class, 'getAllBookingsForCurrentUser']);
     Route::get("/bookings/{id}", [BookingController::class, 'index']);
     Route::get("/reviews/company/{company_id}", [ReviewController::class, 'getReviewsForCompany']);
