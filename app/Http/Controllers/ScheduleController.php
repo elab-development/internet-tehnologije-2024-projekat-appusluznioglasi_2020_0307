@@ -23,6 +23,16 @@ class ScheduleController extends Controller
         $schedule = Schedule::all();
         return ScheduleResource::collection($schedule);
     }
+    public function showAllSchedules(){
+        $schedules =$this->scheduleService->getAllSchedulesInFuture();
+        return response()->json(['schedules'=>ScheduleResource::collection($schedules),'message'=>'All Schedules Found'],200);
+    }
+    public function showAllSchedulesForServiceTitle(Request $request){
+        $title=$request->title;
+        $schedules=$this->scheduleService->getAllSchedulesForTitle($title);
+        return response()->json(['schedules'=>ScheduleResource::collection($schedules),'message'=>"All Schedules for ${title} were founded"],200);
+
+    }
 
     /**
      * Show the form for creating a new resource.
@@ -86,7 +96,7 @@ class ScheduleController extends Controller
 
         return response()->json(["schedules"=>ScheduleResource::collection($schedules)],200);
     }
-      public function showForUser(Request $request)
+    public function showForUser(Request $request)
     {
 
         $user=$request->user();
@@ -137,4 +147,5 @@ class ScheduleController extends Controller
         $this->scheduleService->deleteSchedule($schedule);
         return response()->json(["message"=>"Schedule deleted successfully"],200);
     }
+
 }
