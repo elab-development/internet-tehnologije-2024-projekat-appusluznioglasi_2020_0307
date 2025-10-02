@@ -39,8 +39,6 @@ Route::middleware(['auth:sanctum','role:company,freelancer'])->group(function ()
     Route::delete('/schedules/delete/{schedule}', [ScheduleController::class, 'destroy']);
     Route::put('/schedules/update/{schedule}', [ScheduleController::class, 'update']);
 
-    Route::resource('/companies', CompanyController::class);
-    Route::resource('/services', ServiceController::class);
     Route::post('/schedules/date/user', [ScheduleController::class, 'showForDateForUser']);
     Route::post("/bookings/create", [BookingController::class, 'store']);
     Route::put("/bookings/update", [BookingController::class, 'update']);
@@ -50,6 +48,9 @@ Route::middleware(['auth:sanctum','role:company,freelancer'])->group(function ()
 
 
 Route::middleware('auth:sanctum')->group(function () {
+
+    Route::resource('/companies', CompanyController::class);
+    Route::resource('/services', ServiceController::class);
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::delete('/schedules/{schedule}', [ScheduleController::class, 'destroy']);
     Route::put('/schedules/{schedule}', [ScheduleController::class, 'update']);
