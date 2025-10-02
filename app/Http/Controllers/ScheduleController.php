@@ -98,6 +98,7 @@ class ScheduleController extends Controller
     }
     public function showForUser(Request $request)
     {
+        $schedules = collect();
 
         $user=$request->user();
         if($user->role=='company'){
