@@ -9,8 +9,8 @@ class Service extends Model
 {
     use HasFactory;
     protected $guarded=['id'];
-
-    protected $fillable=['title','description','freelancer_id','max_employees','company_id','price'];
+    protected $fillable=['title','description','freelancer_id','max_employees',
+    'company_id','price'];
 
     // Service ima više rasporeda (schedule)
     public function schedules()
@@ -29,7 +29,6 @@ class Service extends Model
     {
         return $this->belongsTo(User::class, );
     }
-
     // Ako je company vlasnik
     public function company()
     {
