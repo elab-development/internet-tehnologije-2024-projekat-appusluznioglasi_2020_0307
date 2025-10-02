@@ -18,12 +18,6 @@ class Service extends Model
         return $this->hasMany(Schedule::class);
     }
 
-    // Service može imati više booking-a
-    public function bookings()
-    {
-        return $this->hasMany(Booking::class);
-    }
-
     // Service može imati više review-a
     public function reviews()
     {
