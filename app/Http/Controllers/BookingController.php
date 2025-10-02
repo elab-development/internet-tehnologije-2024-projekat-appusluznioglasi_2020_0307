@@ -101,8 +101,8 @@ class BookingController extends Controller
     public function getAllBookingsForSchedule(Request $request)
     {
         $scheduleId=$request->schedule_id;
-        $bookings=$this->bookingService->getBookingsByScheduleId($scheduleId);
-        return response()->json(['bookings'=>BookingResource::collection($bookings),'message'=>"All booking for retrieved successfully"],201);
+        $bookings=$this->bookingService->getBookingByScheduleId($scheduleId);
+        return response()->json(['bookings'=>new BookingResource($bookings),'message'=>"All booking for retrieved successfully"],201);
 
     }
     public function getAllBookingsForUserForStatus(Request $request){
