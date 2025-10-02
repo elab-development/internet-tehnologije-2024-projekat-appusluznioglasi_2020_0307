@@ -19,8 +19,6 @@ class Booking extends Model
         return $this->belongsTo(User::class);
     }
 
-
-
     // Booking pripada rasporedu
     public function schedule()
     {

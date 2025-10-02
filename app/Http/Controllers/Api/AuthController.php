@@ -30,11 +30,7 @@ class AuthController extends Controller
 
         $token=$user->createToken('authToken')->plainTextToken;
         return response()->json(['token'=>$token,'user'=>new UserResource($user)],200);
-
     }
-
-
-
     public function register(Request $request){
         $validator=Validator::make($request->all(),[
             'name'=>'required|string|max:255',
@@ -60,10 +56,8 @@ class AuthController extends Controller
             ]);
 
         }
-
         $token=$user->createToken('authToken')->plainTextToken;
         return response()->json(['token'=>$token,'user'=>new UserResource($user)],201);
-
     }
     public function logout(Request $request)
     {

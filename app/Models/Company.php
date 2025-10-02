@@ -26,6 +26,7 @@ class Company extends Model
     // Review-i ostavljeni na company
     public function reviews()
     {
-        return $this->hasMany(Review::class, 'target_id')->where('target_type', 'company');
+        return $this->hasMany(Review::class, 'target_id')
+        ->where('target_type', 'company');
     }
 }
