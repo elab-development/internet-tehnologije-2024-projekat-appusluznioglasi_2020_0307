@@ -50,6 +50,7 @@ Route::middleware(['auth:sanctum','role:company,freelancer'])->group(function ()
 
 
 Route::middleware('auth:sanctum')->group(function () {
+    Route::post('/logout', [AuthController::class, 'logout']);
     Route::delete('/schedules/{schedule}', [ScheduleController::class, 'destroy']);
     Route::put('/schedules/{schedule}', [ScheduleController::class, 'update']);
     Route::get("/bookings/status/{status}", [BookingController::class, 'getAllBookingsForUserForStatus']);
