@@ -18,7 +18,7 @@ class ReviewService
         return Review::create([
           "user_id"=> $userId,
           "service_id"=>$data ["service_id"],
-          "comment"=>$data["comment"],
+          "comment"=>$data["comment"]??null,
           "rating"=>$data["rating"],
         ]);
        
