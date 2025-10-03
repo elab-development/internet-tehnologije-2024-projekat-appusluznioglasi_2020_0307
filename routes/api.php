@@ -19,7 +19,7 @@ Route::middleware(['auth:sanctum','role:user'])->group(function () {
 Route::get('/schedules', [ScheduleController::class,'showAllSchedules']);
 Route::get('/schedules/title/{title}', [ScheduleController::class,'showAllSchedulesForServiceTitle']);
 
-//Route::post('/schedules/date', [ScheduleController::class,'showForDate']);
+Route::post('/schedules/date', [ScheduleController::class,'showForDate']);
 Route::post('/schedules/date/title', [ScheduleController::class,'showForDateForServiceName']);
 Route::post("/bookings/create", [BookingController::class, 'store']);
 
@@ -40,6 +40,8 @@ Route::middleware(['auth:sanctum','role:company,freelancer'])->group(function ()
     Route::post('/schedules/date/user', [ScheduleController::class, 'showForDateForUser']);
     Route::put("/bookings/update/{booking}", [BookingController::class, 'update']);
     Route::delete("/bookings/delete/{booking}", [BookingController::class, 'destroy']);
+    Route::put('/schedules/{schedule}', [ScheduleController::class, 'update']);
+    Route::post('/schedules', [ScheduleController::class,'store']);
 
 });
 
