@@ -88,14 +88,14 @@ class BookingController extends Controller
         $userId = $request->user()->id;
         $bookings=$this->bookingService->getBookingsByUserId($userId);
         return response()->json(['bookings'=>BookingResource::collection($bookings),'message'=>
-        "All booking for retrieved successfully"],201);
+        "Booking retrieved successfully"],201);
     }
-    public function getBookingForSchedule(Request $request)
+    public function getBookingByScheduleId(Request $request)
     {
         $scheduleId=$request->schedule_id;
         $bookings=$this->bookingService->getBookingByScheduleId($scheduleId);
         return response()->json(['bookings'=>new BookingResource($bookings),'message'=>
-        "All booking for retrieved successfully"],201);
+        "Bookings retrieved successfully"],201);
 
     }
     public function getAllBookingsForUserForStatus(Request $request){
@@ -103,7 +103,7 @@ class BookingController extends Controller
         $status=$request->status;
         $bookings=$this->bookingService->getBookingsByStatusForUserId($status,$user);
         return response()->json(['bookings'=> BookingResource::collection($bookings),'message'=>
-        "All booking for  status ${status} retrieved successfully"],201);
+        "Booking for  status ${status} retrieved successfully"],201);
     }
 
 }
