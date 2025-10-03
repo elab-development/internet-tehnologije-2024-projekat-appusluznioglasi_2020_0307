@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('name');
             $table->text('description')->nullable();
             $table->boolean('badge_verified')->default(false);
-            $table->unsignedBigInteger('user_id')->unique();
+            $table->foreignId('user_id')->constrained("users")->onDelete("cascade");
             $table->timestamps();
         });
     }
