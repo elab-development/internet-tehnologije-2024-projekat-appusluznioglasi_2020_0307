@@ -24,3 +24,9 @@ Homestead.yaml
 Thumbs.db
 composer.json
 composer.lock
+
+# React specific ignores
+/react-appusluzni/node_modules
+/react-appusluzni/.env
+/react-appusluzni/dist
+/react-appusluzni/build
