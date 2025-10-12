@@ -35,6 +35,11 @@ const Register = () => {
     axiosClient.post("/register",payload).then(({data})=>{
       setToken(data.token)
       setUser(data.user)
+        if (data.user.role === 'user') {
+            navigate('/home');
+        } else if (data.user.role === 'freelancer'||data.user.role==='company') {
+            navigate('/homeCompanyFrelanceer');
+        }
 
     })
 
@@ -42,7 +47,7 @@ const Register = () => {
       const response=err.response;
 
       if(response&&response.status === 400){
-       
+
         console.error("Register error:", response.data);
         setErrors(response.data.errors)
         console.log(errors);

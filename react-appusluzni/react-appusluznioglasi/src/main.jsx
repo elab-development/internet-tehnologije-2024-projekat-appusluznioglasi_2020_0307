@@ -10,6 +10,9 @@ import Register from './pages/Register.jsx'
 import NotFound from './pages/NotFound.jsx'
 import Home from './pages/Home.jsx'
 import { ContextProvider } from './contexts/ContextProvider.jsx'
+import HomeCompanyFreelancer from "./pages/HomeCompanyFreelancer.jsx";
+import Profile from "./pages/Profile.jsx";
+import Services from "./pages/Services.jsx";
 
 
 createRoot(document.getElementById('root')).render(
@@ -24,7 +27,11 @@ createRoot(document.getElementById('root')).render(
         </Route>
 
         <Route path="/" element={<DefaultLayout />}>
-        <Route path="/home" element={<Home/>}/>
+            <Route path="/home" element={<Home/>}/>
+            <Route path="/services" element={<Services/>}/>
+            <Route path="/homeCompanyFrelanceer" element={<HomeCompanyFreelancer/>}/>
+            <Route path="/profile/:id" element={<Profile/>}/>
+
 
         </Route>
 
