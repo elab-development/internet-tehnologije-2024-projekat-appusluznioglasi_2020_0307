@@ -65,4 +65,8 @@ class AuthController extends Controller
         return response()->json(['message' => 'You have been logged out!']);
 
     }
+    public function getUserForId($userId){
+        $user=$this->authService->getUserForId($userId);
+        return response()->json(['user'=>new UserResource($user)],200);
+    }
 }

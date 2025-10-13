@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use \App\Http\Controllers\ServiceController;
 
-Route::get('/user/{id}', [AuthController::class, 'showUser']);
+Route::get('/user/{id}', [AuthController::class, 'getUserForId']);
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 Route::middleware(['auth:sanctum','role:user'])->group(function () {

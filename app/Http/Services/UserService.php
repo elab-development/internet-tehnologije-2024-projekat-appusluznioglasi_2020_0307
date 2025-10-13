@@ -20,4 +20,7 @@ class UserService
     public function getUser(Request $request):User{
         return User::where('email',$request['email'])->firstOrFail();
     }
+    public function getUserForId( $request):User{
+        return User::where('id',$request)->firstOrFail();
+    }
 }
