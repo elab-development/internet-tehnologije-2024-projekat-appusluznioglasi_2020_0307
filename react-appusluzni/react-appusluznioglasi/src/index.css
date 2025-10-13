@@ -141,7 +141,7 @@ table > tbody > tr > td {
 /* Login/Signup forms*/
 
 .login-signup-form {
-   
+
     display: flex;
     justify-content: center;
     align-items: center;
@@ -296,9 +296,9 @@ table > tbody > tr > td {
 .role-group label {
     flex: 1;
     justify-content: center;
-} 
+}
 
-/* 
+/*
 .role-group {
   display: flex;
   justify-content: space-between;
@@ -312,21 +312,26 @@ table > tbody > tr > td {
   justify-content: center;
   padding: 10px 0;
   white-space: nowrap;
-  align-items: center;  
-    line-height: 1;  
+  align-items: center;
+    line-height: 1;
 }
 
 .role-group span {
   display: inline-block;
   width: 100%;
   text-align: center;
-} 
+}
 
 
 .role-group input[type="radio"] {
   accent-color: #5b08a7;
-  margin: 0;                 
+  margin: 0;
   width: 16px;
   height: 16px;
-  vertical-align: middle;    
+  vertical-align: middle;
 } */
+.dropdown-toggle::after,
+#profile-dropdown::after {
+    content: none !important;
+    display: none !important;
+}
