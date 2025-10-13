@@ -36,4 +36,12 @@ class ServiceService
     public function deleteService(Service $service): bool{
        return $service->delete();
     }
+    public function getTopRatedServices(int $limit)
+    {
+        return Service::with('reviews')
+            ->withAvg('reviews', 'rating')
+            ->orderByDesc('reviews_avg_rating')
+            ->take($limit)
+            ->get();
+    }
 }

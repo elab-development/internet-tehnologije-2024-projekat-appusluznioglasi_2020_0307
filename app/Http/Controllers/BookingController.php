@@ -22,7 +22,7 @@ class BookingController extends Controller
             ->when($status, function ($query, $status) {
                 $query->where('status', $status);
             })
-            ->paginate(5);
+            ->paginate(6);
         return BookingResource::collection($bookings);
     }
 
@@ -86,9 +86,15 @@ class BookingController extends Controller
     public function getAllBookingsForCurrentUser(Request $request)
     {
         $userId = $request->user()->id;
-        $bookings=$this->bookingService->getBookingsByUserId($userId);
-        return response()->json(['bookings'=>BookingResource::collection($bookings),'message'=>
-        "Booking retrieved successfully"],201);
+        $bookings=$this->bookingService->getBookingsByUserId($userId)->paginate(6);
+        return response()->json([
+            'bookings' => BookingResource::collection($bookings),
+            'current_page' => $bookings->currentPage(),
+            'last_page' => $bookings->lastPage(),
+            'per_page' => $bookings->perPage(),
+            'total' => $bookings->total(),
+            'message' => "Booking retrieved successfully"
+        ], 200);
     }
     public function getBookingByScheduleId(Request $request)
     {

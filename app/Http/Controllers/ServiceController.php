@@ -14,13 +14,22 @@ class ServiceController extends Controller
     public function __construct(ServiceService $service){
         $this->serviceService=$service;
     }
-   
+
     public function index()
     {
         $services = Service::all();
         return  ServiceResource::collection($services);
     }
 
+    public function topRatedServices()
+    {
+        $services = $this->serviceService->getTopRatedServices(3);
+
+        return response()->json([
+            'services' => $services,
+            'message' => 'Top rated services retrieved successfully'
+        ], 200);
+    }
 
     public function create()
     {

@@ -9,9 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use \App\Http\Controllers\ServiceController;
 
-Route::get('/user', function (Request $request) {
-    return $request->user();
-})->middleware('auth:sanctum');
+Route::get('/user/{id}', [AuthController::class, 'showUser']);
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 Route::middleware(['auth:sanctum','role:user'])->group(function () {
@@ -22,6 +20,8 @@ Route::get('/schedules/title/{title}', [ScheduleController::class,'showAllSchedu
 Route::post('/schedules/date', [ScheduleController::class,'showForDate']);
 Route::post('/schedules/date/title', [ScheduleController::class,'showForDateForServiceName']);
 Route::post("/bookings/create", [BookingController::class, 'store']);
+Route::get('/services/topRated', [ServiceController::class, 'topRatedServices']);
+
 
 
     Route::post("/reviews", [ReviewController::class,"store"]);
