@@ -86,7 +86,7 @@ class BookingController extends Controller
     public function getAllBookingsForCurrentUser(Request $request)
     {
         $userId = $request->user()->id;
-        $bookings=$this->bookingService->getBookingsByUserId($userId)->paginate(6);
+        $bookings=$this->bookingService->getBookingsByUserId($userId,6);
         return response()->json([
             'bookings' => BookingResource::collection($bookings),
             'current_page' => $bookings->currentPage(),

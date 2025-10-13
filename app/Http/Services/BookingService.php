@@ -33,8 +33,8 @@ class BookingService
     public function getBookingByScheduleId($scheduleId): ?Booking{
         return Booking::where('schedule_id',$scheduleId)->first();
     }
-    public function getBookingsByUserId($userId): Collection{
-        return Booking::where('user_id',$userId)->get();
+    public function getBookingsByUserId($userId,$perPage){
+        return Booking::where('user_id',$userId)->paginate($perPage);
     }
     public function getBookingsByStatusForUserId($status,User $user): Collection{
         if($user->role == 'user'){
