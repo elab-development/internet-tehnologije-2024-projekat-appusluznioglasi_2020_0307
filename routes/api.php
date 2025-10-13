@@ -9,9 +9,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use \App\Http\Controllers\ServiceController;
 
-Route::get('/user/{id}', [AuthController::class, 'getUserForId']);
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
+
 Route::middleware(['auth:sanctum','role:user'])->group(function () {
 
 Route::get('/schedules', [ScheduleController::class,'showAllSchedules']);
@@ -52,6 +52,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/schedules/show/{schedule}', [ScheduleController::class,'show']);
 
 
+    Route::get("/user/me",[AuthController::class,"getUserForId"]);
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::delete('/schedules/{schedule}', [ScheduleController::class, 'destroy']);
     Route::put('/schedules/{schedule}', [ScheduleController::class, 'update']);

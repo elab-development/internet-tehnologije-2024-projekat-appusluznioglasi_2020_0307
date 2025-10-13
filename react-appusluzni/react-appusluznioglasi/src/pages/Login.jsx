@@ -1,13 +1,15 @@
 import React, { useRef, useState } from 'react'
-import { Link } from 'react-router-dom';
+import {Link, useNavigate} from 'react-router-dom';
 import { useStateContext } from '../contexts/ContextProvider';
 import axiosClient from '../axios-client';
 
 const Login = () => {
+    const navigate=useNavigate()
     const emailRef = useRef()
     const passwordRef = useRef()
     const { setUser, setToken } = useStateContext()
     const [message, setMessage] = useState(null)
+
 
   const onSubmit=(ev)=>{
     ev.preventDefault();
@@ -19,6 +21,11 @@ const Login = () => {
       .then(({data}) => {
         setUser(data.user)
         setToken(data.token);
+          if (data.user.role === 'user') {
+              navigate('/home');
+          } else if (data.user.role === 'freelancer'||data.user.role==='company') {
+              navigate('/homeCompanyFrelanceer');
+          }
       })
       .catch((err) => {
         const response = err.response;
@@ -28,7 +35,7 @@ const Login = () => {
         }
       })
   }
-  
+
   return (
       <div className="login-signup-form animated fadeInDown">
       <div className="form">

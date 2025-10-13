@@ -1,21 +1,38 @@
-import React from 'react'
+import React, {useEffect} from 'react'
 import {Navigate, Outlet, useNavigate} from 'react-router-dom'
 import { useStateContext } from '../contexts/ContextProvider'
 import {Button, Container, Nav, Navbar, NavDropdown} from "react-bootstrap";
 import {FaChevronDown} from "react-icons/fa";
+import axiosClient from "../axios-client.js";
 
 const DefaultLayout = () => {
     const { user, token, setUser, setToken } = useStateContext();
     const navigate = useNavigate();
 
-  if(!token){
-    return <Navigate to="/login"/>;
-  }
+
+    if (!token||!user){
+        <Navigate to={"/login"}/>
+    }
+
+
+    useEffect(() => {
+
+        if (!user) {
+            axiosClient.get(`/user/me`)
+                .then(({ data }) => {
+                    setUser(data.user);
+                    console.log('ruta',data.user)
+                }
+
+                )
+                .catch(err => console.error(err));
+        }
+    },[user] );
 
     const handleLogout = () => {
         setUser(null);
         setToken(null);
-        navigate('/');
+        navigate('/login');
     };
 
 
@@ -46,7 +63,7 @@ const DefaultLayout = () => {
                 <Container className="d-flex justify-content-between align-items-center">
                     <div className="d-flex align-items-center gap-3">
                         <Navbar.Brand
-                            onClick={() => navigate(getDashboardLink())}
+                            onClick={() => navigate('/home')}
                             style={{ fontWeight: '600', cursor:'pointer', fontSize: '2rem' }}
                         >
                             ServisHub
