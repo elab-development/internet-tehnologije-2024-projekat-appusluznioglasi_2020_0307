@@ -15,10 +15,23 @@ class ServiceController extends Controller
         $this->serviceService=$service;
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $services = Service::all();
-        return  ServiceResource::collection($services);
+        $filters = [
+            'query' => $request->query('query'),
+            'price_min' => $request->query('price_min'),
+            'price_max' => $request->query('price_max'),
+            'rating_min' => $request->query('rating_min'),
+            'limit' => $request->query('limit', 6),
+        ];
+
+        $services = $this->serviceService->searchAndFilter($filters);
+
+        return response()->json([
+            'services' => ServiceResource::collection($services),
+            'hasMore' => $services->hasMorePages(),
+            'current_page' => $services->currentPage(),
+        ]);
     }
 
     public function topRatedServices()

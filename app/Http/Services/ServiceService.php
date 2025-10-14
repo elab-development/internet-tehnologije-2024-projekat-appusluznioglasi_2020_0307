@@ -5,6 +5,7 @@ namespace App\Http\Services;
 use App\Models\Service;
 use App\Models\User;
 use Exception;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class ServiceService
 {
@@ -43,5 +44,22 @@ class ServiceService
             ->orderByDesc('reviews_avg_rating')
             ->take($limit)
             ->get();
+    }
+    public function searchAndFilter(array $filters):LengthAwarePaginator{
+        $query=Service::withAvg("reviews", "rating");
+        if (!empty($filters['query'])) {
+            $query->where('title','like','%' .$filters['query'] . "%");
+        }
+        if (!empty($filters['price_min'])) {
+            $query->where('price','>=',$filters['price_min']);
+        }
+        if (!empty($filters['price_max'])) {
+            $query->where('price','<=',$filters['price_max']);
+        }
+        if(!empty($filters['rating_min'])){
+            $query->having('reviews_avg_rating' ,'>=',$filters['rating_min']);
+        }
+        $limit=$filters['limit']??6;
+        return $query->orderByDesc('id')->paginate($limit);
     }
 }

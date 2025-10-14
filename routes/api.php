@@ -21,6 +21,7 @@ Route::post('/schedules/date', [ScheduleController::class,'showForDate']);
 Route::post('/schedules/date/title', [ScheduleController::class,'showForDateForServiceName']);
 Route::post("/bookings/create", [BookingController::class, 'store']);
 Route::get('/services/topRated', [ServiceController::class, 'topRatedServices']);
+Route::get("services/title/{title}", [ServiceController::class, 'show']);
 
 
 
