@@ -21,7 +21,7 @@ class ReviewService
           "comment"=>$data["comment"]??null,
           "rating"=>$data["rating"],
         ]);
-       
+
     }
     public function getReviewsForCompany($companyId): Collection
     {
@@ -30,7 +30,7 @@ class ReviewService
             $q->where('company_id', $companyId);
         })
         ->get();
-   
+
   }
        public function getReviewsForFreelancer($freelancerId): Collection
     {
@@ -39,11 +39,16 @@ class ReviewService
             $q->where('freelancer_id', $freelancerId);
         })
         ->get();
-   
+
   }
-  
-  
-   
+    public function getReviewsForService($serviceId): Collection
+    {
+        return Review::where('service_id', $serviceId)->get();
+
+    }
+
+
+
 
 
 

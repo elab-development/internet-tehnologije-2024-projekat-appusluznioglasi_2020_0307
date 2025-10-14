@@ -65,6 +65,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get("/bookings/showForUserId", [BookingController::class, 'getAllBookingsForCurrentUser']);
     Route::get("/bookings/{booking}", [BookingController::class, 'show']);
     Route::get("/reviews/company/{company_id}", [ReviewController::class, 'getReviewsForCompany']);
+    Route::get("/reviews/service/{serviceId}", [ReviewController::class, 'getReviewsForService']);
+
     Route::get("/reviews/freelancer/{freelancer_id}", [ReviewController::class, 'getReviewsForFreelancer']);
 });
 

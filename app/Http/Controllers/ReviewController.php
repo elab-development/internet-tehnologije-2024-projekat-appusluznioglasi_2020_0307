@@ -18,19 +18,19 @@ class ReviewController extends Controller
     }
     public function index()
     {
-       
+
     }
 
-   
+
     public function create()
     {
-       
+
     }
 
     public function store(Request $request)
     {
         $validator=Validator::make($request->all(),[
-            
+
             'service_id'=>'required',
             'rating'=>'required|numeric|between:1,5',
             'comment'=>'nullable|string',
@@ -43,10 +43,15 @@ class ReviewController extends Controller
         return response()->json(["review"=>new ReviewResource($review),"message"=>"Review added successfully"],200);
     }
 
-   
+
+    public function getReviewsForService(Request $request)
+    {
+        $reviews=$this->reviewService->getReviewsForService($request->serviceId);
+        return response()->json(["reviews"=>ReviewResource::collection($reviews)],200);
+    }
     public function show(Review $review)
     {
-       
+
     }
     public function getReviewsForCompany(Request $request){
         $companyId= $request->company_id;
@@ -60,19 +65,19 @@ class ReviewController extends Controller
         return response()->json(["reviews"=> ReviewResource::collection($reviews),"message"=>"Reviews were founded successfully"],202);
     }
 
-  
+
     public function edit(Review $review)
     {
-     
+
     }
 
     public function update(Request $request, Review $review)
     {
     }
 
-  
+
     public function destroy(Review $review)
     {
-      
+
     }
 }

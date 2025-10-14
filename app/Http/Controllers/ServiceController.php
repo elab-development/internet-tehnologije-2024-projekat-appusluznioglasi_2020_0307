@@ -39,7 +39,7 @@ class ServiceController extends Controller
         $services = $this->serviceService->getTopRatedServices(3);
 
         return response()->json([
-            'services' => $services,
+            'services' => ServiceResource::collection($services),
             'message' => 'Top rated services retrieved successfully'
         ], 200);
     }
