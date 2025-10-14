@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { useStateContext } from "../contexts/ContextProvider.jsx";
 import { Button, Card, Col, Container, Row, Spinner } from "react-bootstrap";
 import axiosClient from "../axios-client.js";
+import ServiceListWithReviews from "./ServiceListWithReviews.jsx";
 
 const Home = () => {
     const navigate = useNavigate();
@@ -81,23 +82,32 @@ const Home = () => {
                     ) : (
                         <Row>
                             {(showAllBookings ? bookings : bookings.slice(0, 6)).map((booking) => (
-                                <Col md={4} className="mb-3" key={booking.id}>
-                                    <Card>
-                                        <Card.Body>
-                                            <Card.Title>{booking.schedule?.service?.title || "Nepoznata usluga"}</Card.Title>
-                                            <Card.Text>
-                                                Termin: {new Date(booking.schedule?.date).toLocaleString()} <br />
-                                                Izvršilac: {booking.schedule?.service?.freelancer?.name || booking.schedule?.service?.company?.name || "Nepoznat"} <br />
-                                                Status: {booking.status}
-                                            </Card.Text>
-                                            <Button variant="primary" onClick={() => navigate(`/booking/${booking.id}`)}>
-                                                Pogledaj detalje
-                                            </Button>
+                                <Col md={4} className="mb-4" key={booking.id}>
+                                    <Card className="h-100 shadow-sm" style={{ borderRadius: '12px', padding: '1rem', position: 'relative' }}>
+
+                                        <div style={{ position: 'absolute', top: '1rem', right: '1rem', fontSize: '0.9rem', color: '#555', fontWeight: '500' }}>
+                                            {new Date(booking.schedule?.date).toDateString('sr-RS', { day: 'numeric', month: 'short', year: 'numeric' })}
+                                        </div>
+
+                                        <Card.Body className="d-flex flex-column justify-content-between h-100">
+
+                                            <Card.Title style={{textAlign:"center",fontSize:"1.3rem", marginTop:'1rem'}} className="fw-bold mb-4">{booking.schedule?.service?.title || "Nepoznata usluga"}</Card.Title>
+
+                                            <div style={{ border: '1px solid #ddd', borderRadius: '8px', padding: '0.5rem', fontSize: '0.85rem', marginBottom: 'auto' }}>
+                                                <h6 className="mb-2" ><b>Izvršilac:</b> {booking.schedule?.service?.freelancer?.name || booking.schedule?.service?.company?.name || "Nepoznat"}</h6>
+                                                <p className="mb-0"><b>Status:</b> <span className={`fw-bold text-${booking.status==='confirmed'?'success':'warning'}`}>{booking.status}</span></p>
+                                            </div>
+
+                                            <div className="mt-3" style={{ fontSize: '0.85rem', color: '#555' }}>
+                                                <b>Vreme:</b> {(booking.schedule?.time_from).slice(0,5)} - {(booking.schedule?.time_to).slice(0,5)}
+                                            </div>
+
                                         </Card.Body>
                                     </Card>
                                 </Col>
                             ))}
                         </Row>
+
                     )}
                     {bookings.length > 6 && !showAllBookings && (
                         <Button onClick={() => setShowAllBookings(true)}>Vidi još</Button>
@@ -110,26 +120,9 @@ const Home = () => {
             {/* Services */}
             {!loadingServices && (
                 <>
-                    <h3 className="mb-3">Pogledajte još usluga</h3>
-                    {services.length === 0 ? (
-                        <p>Nema usluga.</p>
-                    ) : (
-                        <Row>
-                            {services.map((service) => (
-                                <Col md={4} className="mb-3" key={service.id}>
-                                    <Card>
-                                        <Card.Body>
-                                            <Card.Title>{service.title}</Card.Title>
-                                            <Card.Text>Ocena: {service.reviews_avg_rating || "Nema ocena"}</Card.Text>
-                                            <Button variant="success" onClick={() => navigate(`/services/${service.id}`)}>
-                                                Pogledaj
-                                            </Button>
-                                        </Card.Body>
-                                    </Card>
-                                </Col>
-                            ))}
-                        </Row>
-                    )}
+                    <h3 className="mb-3" >Pogledajte još usluga</h3>
+
+                    <ServiceListWithReviews services={services}/>
                 </>
             )}
         </Container>

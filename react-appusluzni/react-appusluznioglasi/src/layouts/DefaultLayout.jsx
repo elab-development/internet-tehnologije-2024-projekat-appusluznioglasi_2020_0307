@@ -63,6 +63,7 @@ const DefaultLayout = () => {
                 bg="light"
                 expand="lg"
                 sticky="top"
+
                 className="mb-3 shadow-sm"
                 style={{
                     borderBottom: '1px solid #ddd',
@@ -90,15 +91,41 @@ const DefaultLayout = () => {
                         )}
 
                         {user?.role === 'user' && (
-                            <Form className="d-flex" onSubmit={handleSearch}>
+                            <Form className="d-flex align-items-center" onSubmit={handleSearch} style={{ gap: '0.5rem', marginTop:'1rem' }}>
                                 <FormControl
                                     type="search"
                                     placeholder="Pretraži usluge..."
-                                    className="me-2"
                                     value={searchQuery}
                                     onChange={(e) => setSearchQuery(e.target.value)}
+                                    style={{
+                                        borderRadius: '50px',
+                                        padding: '0.6rem 1.2rem',
+                                        border: '1px solid #ccc',
+                                        boxShadow: '0 2px 5px rgba(0,0,0,0.1)',
+                                        width: '250px',
+                                        transition: 'all 0.2s',
+                                    }}
+                                    onFocus={(e) => e.target.style.boxShadow = '0 2px 10px rgba(0,123,255,0.3)'}
+                                    onBlur={(e) => e.target.style.boxShadow = '0 2px 5px rgba(0,0,0,0.1)'}
                                 />
-                                <Button type="submit" variant="secondary">Pretraži</Button>
+                                <Button
+                                    type="submit"
+                                    style={{
+                                        borderRadius: '50px',           // ovalno dugme
+                                        backgroundColor: '#0d6efd',     // moderni plavi ton
+                                        border: 'none',
+                                        padding: '0.55rem 1rem',
+                                        color: '#fff',
+                                        fontWeight: '500',
+                                        marginBottom:'1rem',
+                                        boxShadow: '0 2px 5px rgba(0,0,0,0.2)',
+                                        transition: 'all 0.2s',
+                                    }}
+                                    onMouseEnter={(e) => e.target.style.backgroundColor = '#0b5ed7'}
+                                    onMouseLeave={(e) => e.target.style.backgroundColor = '#0d6efd'}
+                                >
+                                    Pretraži
+                                </Button>
                             </Form>
 
                         )}
@@ -153,6 +180,7 @@ const DefaultLayout = () => {
                                 }
                                 id="profile-dropdown"
                             >
+                                {user?.role !== 'user' && (
                                 <NavDropdown.Item onClick={() => {
                                     console.log("USER:", user);
 
@@ -166,6 +194,7 @@ const DefaultLayout = () => {
 
                                     Profil
                                 </NavDropdown.Item>
+                                    )}
                                 <NavDropdown.Divider />
                                 <NavDropdown.Item onClick={handleLogout}>Odjavi se</NavDropdown.Item>
                             </NavDropdown>
