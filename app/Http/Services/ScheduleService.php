@@ -8,6 +8,7 @@ use Exception;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Carbon;
 use phpDocumentor\Reflection\PseudoTypes\List_;
+use function Laravel\Prompts\text;
 
 class ScheduleService
 {
@@ -32,6 +33,10 @@ class ScheduleService
         return $schedule;
 
     }
+    public function showForServiceId( $serviceId){
+        return Schedule::where('service_id',$serviceId)->get();
+    }
+
     public function deleteSchedule(Schedule $schedule): bool{
        return $schedule->delete();
     }

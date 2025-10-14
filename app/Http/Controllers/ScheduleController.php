@@ -30,6 +30,10 @@ class ScheduleController extends Controller
         return response()->json(['schedules'=>ScheduleResource::collection($schedules),'message'=>"All Schedules for ${title} were founded"],200);
 
     }
+    public function showForServiceId(Request $request){
+        $schedules=$this->scheduleService->showForServiceId($request->service_id);
+        return response()->json(['schedules'=>ScheduleResource::collection($schedules)],200);
+    }
 
     /**
      * Show the form for creating a new resource.
