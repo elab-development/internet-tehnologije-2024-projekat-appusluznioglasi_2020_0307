@@ -1,6 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import { useLocation } from 'react-router-dom';
 import axiosClient from '../axios-client';
+import {Modal} from "react-bootstrap";
+import AppointmentList from "./AppointmenList.jsx";
 
 const Services = () => {
     const [services, setServices] = useState([]);
@@ -10,6 +12,13 @@ const Services = () => {
 
     const queryParams = new URLSearchParams(location.search);
     const searchQuery = queryParams.get('query') || '';
+    const [selectedService,setSelectedService]=useState(null);
+    const [showModal,setShowModal]=useState(false);
+    const handleShowAppointments=(service)=>{
+        setSelectedService(service);
+        setShowModal(true);
+    }
+
 
     useEffect(() => {
         axiosClient.get(`/services`, {
@@ -34,9 +43,10 @@ const Services = () => {
                         <h5>{service.name}</h5>
                         <h6 align={'center'}>{service.title}</h6>
                         <p>Cena: {service.price} RSD</p>
-                        <p>Ocena: {service.reviews_avg_rating}</p>
+                        <p>Ocena: {service.reviews_avg_rating===0?'Nema ocena':service.reviews_avg_rating}</p>
                         <p>Raspolozivo izvrsilaca: {service.company==null?1:service.max_employees}</p>
                         <p>Izvršilac: {service.company==null?service.freelancer.name:service.company.name}</p>
+                        <button onClick={()=>handleShowAppointments(service)}>Pogledaj dostupne termine</button>
                     </div>
                 ))}
             </div>
@@ -48,7 +58,20 @@ const Services = () => {
                     </button>
                 </div>
             )}
+            <Modal show={showModal} onHide={()=>setShowModal(false)} size="lg" centered={true}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Dostupni termini za :{selectedService?.title}</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    {selectedService?(
+                        <AppointmentList serviceId={selectedService?.id}></AppointmentList>
+                    ):(
+                        <p>Ucitavanje...</p>
+                    )}
+                </Modal.Body>
+            </Modal>
         </div>
+
     );
 };
 
