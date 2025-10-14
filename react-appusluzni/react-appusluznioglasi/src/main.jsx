@@ -13,6 +13,7 @@ import { ContextProvider } from './contexts/ContextProvider.jsx'
 import HomeCompanyFreelancer from "./pages/HomeCompanyFreelancer.jsx";
 import Profile from "./pages/Profile.jsx";
 import Services from "./pages/Services.jsx";
+import ServicesForUser from "./pages/ServicesForUser.jsx";
 
 
 createRoot(document.getElementById('root')).render(
@@ -28,7 +29,7 @@ createRoot(document.getElementById('root')).render(
 
         <Route path="/" element={<DefaultLayout />}>
             <Route path="/home" element={<Home/>}/>
-            <Route path="/services" element={<Services/>}/>
+            <Route path="/services" element={<ServicesForUser/>}/>
             <Route path="/homeCompanyFrelanceer" element={<HomeCompanyFreelancer/>}/>
             <Route path="/profile/:id" element={<Profile/>}/>
 

@@ -1,13 +1,16 @@
-import React, {useEffect} from 'react'
+import React, {useEffect, useState} from 'react'
 import {Navigate, Outlet, useNavigate} from 'react-router-dom'
 import { useStateContext } from '../contexts/ContextProvider'
-import {Button, Container, Nav, Navbar, NavDropdown} from "react-bootstrap";
+import {Button, Container, Form, FormControl, Nav, Navbar, NavDropdown} from "react-bootstrap";
 import {FaChevronDown} from "react-icons/fa";
 import axiosClient from "../axios-client.js";
 
 const DefaultLayout = () => {
     const { user, token, setUser, setToken } = useStateContext();
     const navigate = useNavigate();
+    const [searchQuery,setSearchQuery]=useState("");
+
+
 
 
     if (!token||!user){
@@ -47,6 +50,13 @@ const DefaultLayout = () => {
         return displayName?.charAt(0).toUpperCase() || '?';
     };
 
+    const handleSearch=(e)=>{
+        e.preventDefault()
+        if (searchQuery.trim()!==""){
+            navigate(`/services?query=${encodeURIComponent(searchQuery)}`);
+        }
+    }
+
     return (
         <>
             <Navbar
@@ -70,12 +80,30 @@ const DefaultLayout = () => {
                         </Navbar.Brand>
 
 
+                        {user?.role !== 'user' && (
                         <Nav.Link
                             onClick={() => navigate('/services')}
                             style={{ cursor: 'pointer', color: '#555', fontWeight: '500' }}
                         >
                             Usluge
                         </Nav.Link>
+                        )}
+
+                        {user?.role === 'user' && (
+                            <Form className="d-flex" onSubmit={handleSearch}>
+                                <FormControl
+                                    type="search"
+                                    placeholder="Pretraži usluge..."
+                                    className="me-2"
+                                    value={searchQuery}
+                                    onChange={(e) => setSearchQuery(e.target.value)}
+                                />
+                                <Button type="submit" variant="secondary">Pretraži</Button>
+                            </Form>
+
+                        )}
+
+
                         {user?.role !== 'user' && (
                             <Nav.Link
                                 onClick={() => navigate('/termins')}
