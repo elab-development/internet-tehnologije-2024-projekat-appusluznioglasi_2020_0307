@@ -77,4 +77,30 @@ class ServiceService
         $limit=$filters['limit']??6;
         return $query->orderByDesc('id')->paginate($limit);
     }
+
+    public function getServicesForUser(User $user)
+{
+    if ($user->role === 'freelancer') {
+        return Service::withAvg('reviews', 'rating')
+            ->where('freelancer_id', $user->id)
+            ->orderByDesc('id')
+            ->get();
+    }
+
+    if ($user->role === 'company') {
+        // Pretpostavljamo da user ima relaciju `company()` -> hasOne(Company::class)
+        $company = $user->company;
+
+        if (!$company) {
+            throw new Exception('Nije pronađena kompanija za ovog korisnika.');
+        }
+
+        return Service::withAvg('reviews', 'rating')
+            ->where('company_id', $company->id)
+            ->orderByDesc('id')
+            ->get();
+    }
+
+    throw new Exception('Ovaj tip korisnika nema sopstvene usluge.');
+}
 }

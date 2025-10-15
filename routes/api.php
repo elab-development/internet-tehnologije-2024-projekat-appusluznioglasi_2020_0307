@@ -46,6 +46,8 @@ Route::middleware(['auth:sanctum','role:company,freelancer'])->group(function ()
     Route::put('/schedules/{schedule}', [ScheduleController::class, 'update']);
     Route::post('/schedules', [ScheduleController::class,'store']);
 
+    Route::get('/services/my-services', [ServiceController::class, 'getMyServices']);
+
 });
 
 

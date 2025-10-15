@@ -80,6 +80,15 @@ const DefaultLayout = () => {
                             ServisHub
                         </Navbar.Brand>
 
+                        {(user?.role === 'company' || user?.role === 'freelancer') && (
+                         <Nav.Link
+                            onClick={() => navigate('/my-services')}
+                            style={{ cursor: 'pointer', color: '#555', fontWeight: '500' }}
+    >
+                             My services
+                        </Nav.Link>
+                        )}
+
 
                         {user?.role !== 'user' && (
                         <Nav.Link

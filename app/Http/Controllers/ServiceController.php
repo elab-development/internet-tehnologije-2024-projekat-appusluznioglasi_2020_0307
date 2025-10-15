@@ -44,6 +44,20 @@ class ServiceController extends Controller
         ], 200);
     }
 
+
+    public function getMyServices(Request $request)
+{
+    $user = $request->user();
+
+    
+        $services = $this->serviceService->getServicesForUser($user);
+        return response()->json([
+            'services' => ServiceResource::collection($services),
+            'message' => 'Services retrieved successfully for user: ' . $user->name,
+        ], 200);
+  
+}
+
     public function create()
     {
         //

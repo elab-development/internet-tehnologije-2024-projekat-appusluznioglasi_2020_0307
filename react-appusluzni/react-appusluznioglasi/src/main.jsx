@@ -30,6 +30,7 @@ createRoot(document.getElementById('root')).render(
         <Route path="/" element={<DefaultLayout />}>
             <Route path="/home" element={<Home/>}/>
             <Route path="/services" element={<ServicesForUser/>}/>
+            <Route path="/my-services" element={<Services/>}/>
             <Route path="/homeCompanyFrelanceer" element={<HomeCompanyFreelancer/>}/>
             <Route path="/profile/:id" element={<Profile/>}/>
 
