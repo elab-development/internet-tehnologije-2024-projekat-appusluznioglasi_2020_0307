@@ -5,11 +5,18 @@ namespace App\Http\Services;
 use App\Models\Service;
 use App\Models\User;
 use Exception;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Pagination\LengthAwarePaginator;
 
 class ServiceService
 {
 
+    protected function uploadImage(?UploadedFile $image):?string{
+        if($image){
+            return $image->store('images','public');
+        }
+        return null;
+    }
     public function addService(array $data,User $user): Service
     {
         $attributes = [
@@ -17,7 +24,15 @@ class ServiceService
             'description' => $data['description'] ?? null,
             'price' => $data['price'],
             'max_employees' => $data['max_employees'] ?? 1,
+            'image' => $data['image'] ?? null,
+
         ];
+        if(isset($data['image'])){
+            $image = $this->uploadImage($data['image']);
+            if($image){
+                $attributes['image'] = $image;
+            }
+        }
 
         if ($user->role === 'freelancer') {
             $attributes['freelancer_id'] = $user->id;

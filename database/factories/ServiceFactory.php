@@ -6,6 +6,8 @@ use App\Models\Service;
 use App\Models\User;
 use App\Models\Company;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 /**
  * @extends Factory<Service>
@@ -13,6 +15,26 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 class ServiceFactory extends Factory
 {
     protected $model = Service::class;
+
+
+    protected function downloadAndStoreImage(): string
+    {
+        // ✅ Promenite ovaj deo
+        // Koristite direktan i pouzdan link sa Picsum-a, koji daje nasumičnu sliku
+        $imageUrl = 'https://picsum.photos/640/480/?random=' . rand(1, 1000); // Dodajemo rand za veći randomizaciju
+
+        // 2. Preuzimanje sadržaja slike
+        // PAŽNJA: Da bi file_get_contents funkcionisao, morate imati uključen 'allow_url_fopen' u php.ini
+        $imageContent = file_get_contents($imageUrl);
+
+        // ... ostatak koda ostaje isti ...
+        $fileName = 'service_' . Str::uuid()->toString() . '.jpg';
+        $destinationPath = 'services/' . $fileName;
+
+        Storage::disk('public')->put($destinationPath, $imageContent);
+
+        return $destinationPath;
+    }
 
     public function definition(): array
     {
@@ -39,31 +61,34 @@ class ServiceFactory extends Factory
         ];
     }
 
-    
+
     public function forFreelancer(User $freelancer = null): static
     {
         return $this->state(function (array $attributes) use ($freelancer) {
-           
+
             $freelancer = $freelancer ?: User::where('role', 'freelancer')->inRandomOrder()->first();
 
             return [
                 'freelancer_id' => $freelancer?->id,
                 'company_id'    => null,
                 'max_employees' => 1,
+                'image'=> $this->downloadAndStoreImage(),
             ];
         });
     }
 
- 
+
     public function forCompany(Company $company = null): static
     {
         return $this->state(function (array $attributes) use ($company) {
-            
+
             $company = $company ?: Company::inRandomOrder()->first();
 
             return [
                 'company_id'    => $company?->id,
                 'freelancer_id' => null,
+                'image'=> $this->downloadAndStoreImage(),
+
             ];
         });
     }

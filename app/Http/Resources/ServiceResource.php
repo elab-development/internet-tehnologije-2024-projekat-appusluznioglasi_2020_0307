@@ -21,6 +21,7 @@ class ServiceResource extends JsonResource
             'description'=>$this->description,
             'company'=>new CompanyResource($this->company),
             'freelancer'=>new UserResource($this->freelancer),
+            'image'=>$this->image,
             'max_employees'=>$this->max_employees,
             'reviews_avg_rating'=>round($this->reviews_avg_rating??0,2)
 

@@ -15,6 +15,16 @@ const ServiceList = ({ services }) => {
         await fetchReviews(service.id);
     };
 
+    const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://127.0.0.1:8000";
+
+
+    const FALLBACK_IMAGE_URL = "https://placehold.co/400x250?text=Slika+nedostupna";
+
+    const getImageUrl = (imagePath) => {
+        if (!imagePath) return FALLBACK_IMAGE_URL;
+        return `${API_BASE_URL}/storage/${imagePath}`;
+    };
+
     const handleClose = () => {
         setSelectedService(null);
         setReviews([]);
@@ -60,8 +70,14 @@ const ServiceList = ({ services }) => {
                                         ? service.company.name
                                         : service.freelancer?.name || "Nepoznat izvršilac"}
                                 </p>
+                                <Card.Img
+                                    variant="top"
+                                    src={getImageUrl(service.image)}
+                                    alt={service.title}
+                                    className="rounded-3 mb-3"
+                                    style={{ height: '200px', objectFit: 'cover' }}
+                                />
 
-                                {/* Donji deo */}
                                 <div className="d-flex justify-content-between align-items-center mt-auto">
                                     <div className="d-flex align-items-center gap-1">
                                         <FaStar color="#ffc107" />

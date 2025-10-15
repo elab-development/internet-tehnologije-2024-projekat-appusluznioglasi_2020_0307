@@ -10,7 +10,7 @@ class Service extends Model
     use HasFactory;
     protected $guarded=['id'];
     protected $fillable=['title','description','freelancer_id','max_employees',
-    'company_id','price'];
+    'company_id','price','image'];
 
     // Service ima više rasporeda (schedule)
     public function schedules()

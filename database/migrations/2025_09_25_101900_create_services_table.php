@@ -17,8 +17,7 @@ return new class extends Migration
             $table->text('description')->nullable();
             $table->decimal('price', 8, 2);
             $table->integer('max_employees')->default(1); // za kompaniju
-
-
+            $table->string("image")->nullable();
             $table->foreignId('freelancer_id')->nullable()->constrained('users')->onDelete('cascade');
             $table->foreignId('company_id')->nullable()->constrained('companies')->onDelete('cascade');
             $table->timestamps();

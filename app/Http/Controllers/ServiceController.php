@@ -56,7 +56,9 @@ class ServiceController extends Controller
             'title'=>'required',
             'price'=>'required|numeric',
             'max_employees'=>'numeric',
+            'image'=>'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
+
         if($validator->fails()){
             return response()->json($validator->errors(),400);
         }
