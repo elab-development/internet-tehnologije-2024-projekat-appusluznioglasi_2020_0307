@@ -3,10 +3,12 @@ import { Card, Button, Modal, Spinner, Col } from "react-bootstrap"; // Dodat je
 import { FaStar } from "react-icons/fa";
 import axiosClient from "../axios-client";
 import AppointmentList from "./AppointmenList.jsx";
+import { useStateContext } from "../contexts/ContextProvider.jsx";
 
 
 
-const ServiceCard = ({ service }) => {
+const ServiceCard = ({ service, onDelete, onEdit }) => {
+    const { user } = useStateContext();
     const [showReviewsModal, setShowReviewsModal] = useState(false);
     const [reviews, setReviews] = useState([]);
     const [loadingReviews, setLoadingReviews] = useState(false);
@@ -105,6 +107,26 @@ const ServiceCard = ({ service }) => {
                         >
                             Vidi Komentare
                         </Button>
+
+                         {/* Dugmad za izmenu i brisanje - samo za freelancera ili kompaniju */}
+            {(user?.role === "freelancer" || user?.role === "company") && (
+              <div className="d-flex flex-column gap-2 mt-2">
+                <Button
+                  variant="outline-warning"
+                  className="w-100 rounded-pill px-3 fw-semibold"
+                  onClick={() => onEdit?.(service)}
+                >
+                  ✏️ Izmeni uslugu
+                </Button>
+                <Button
+                  variant="outline-danger"
+                  className="w-100 rounded-pill px-3 fw-semibold"
+                  onClick={() => onDelete?.(service.id)}
+                >
+                  🗑️ Obriši uslugu
+                </Button>
+              </div>
+            )}
                     </div>
                 </Card.Body>
             </Card>

@@ -23,6 +23,18 @@ const Services=()=>{
       .finally(() => setLoading(false));
   }, [user]);
 
+  const handleDelete = async (id) => {
+  if (!window.confirm("Da li ste sigurni da želite da obrišete ovu uslugu?")) return;
+  try {
+    await axiosClient.delete(`/services/${id}`);
+ 
+    setServices((prev) => prev.filter((s) => s.id !== id));
+  } catch (err) {
+    console.error("Greška pri brisanju usluge:", err);
+    alert("Došlo je do greške pri brisanju usluge.");
+  }
+};
+
   if (loading) {
     return <p>Učitavanje usluga...</p>;
   }
@@ -36,7 +48,7 @@ const Services=()=>{
       ) : (
         <Row>
           {services.map((service) => (
-            <ServiceCard key={service.id} service={service} />
+            <ServiceCard key={service.id} service={service} onDelete={handleDelete} />
           ))}
         </Row>
       )}

@@ -37,7 +37,8 @@ class ServiceService
         if ($user->role === 'freelancer') {
             $attributes['freelancer_id'] = $user->id;
         } elseif ($user->role === 'company') {
-            $attributes['company_id'] = $user->id;
+
+            $attributes['company_id'] =  $user->company->id;
         } else {
             throw new Exception('Ovaj tip korisnika ne može da dodaje usluge.');
         }
