@@ -19,11 +19,11 @@ const AppointmentList=({serviceId})=>{
                 console.error("Gresla",err);
                 alert("Doslo je do greske prilikom rezervacije")
             })
-            .finally(()=>{navigate('/services')});
+            .finally(()=>{navigate('/home')});
 
     };
     useEffect(()=>{
-        if (!serviceId)navigate('/services');
+        if (!serviceId)navigate('/home');
         axiosClient.get(`/schedules/service/${serviceId}`)
             .then(({data})=>{
                 console.log(data);

@@ -2,9 +2,11 @@ import React, { useEffect, useState } from 'react';
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useStateContext } from "../contexts/ContextProvider.jsx";
-import { Button, Card, Col, Container, Row, Spinner } from "react-bootstrap";
+import {Button, Card, Col, Container, Modal, Row, Spinner} from "react-bootstrap";
 import axiosClient from "../axios-client.js";
-import ServiceListWithReviews from "./ServiceListWithReviews.jsx";
+import ServiceListWithReviews from "./ServiceCard.jsx";
+import ServiceCard from "./ServiceCard.jsx";
+import AppointmentList from "./AppointmenList.jsx";
 
 const Home = () => {
     const navigate = useNavigate();
@@ -16,6 +18,8 @@ const Home = () => {
     const [loadingServices, setLoadingServices] = useState(true);
     const [showAllBookings, setShowAllBookings] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
+    const [selectedService,setSelectedService]=useState(null);
+
     const [lastPage, setLastPage] = useState(1);
 
     // Fetch bookings
@@ -120,11 +124,23 @@ const Home = () => {
             {/* Services */}
             {!loadingServices && (
                 <>
-                    <h3 className="mb-3" >Pogledajte još usluga</h3>
-
-                    <ServiceListWithReviews services={services}/>
+                    <h3 className="mb-3" >Najbolje ocenjene usluge</h3>
+                    {/* Proverite da li services postoji i ima elemente */}
+                    {services && services.length > 0 ? (
+                        <Row>
+                            {services.map((service) => (
+                                <ServiceCard
+                                    key={service.id}
+                                    service={service}
+                                />
+                            ))}
+                        </Row>
+                    ) : (
+                        <p>Nema sličnih usluga za prikaz.</p>
+                    )}
                 </>
             )}
+
         </Container>
     );
 };
