@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\ScheduleResource;
+use App\Http\Services\BookingService;
 use App\Http\Services\ScheduleService;
 use App\Models\Schedule;
 use Illuminate\Http\Request;
@@ -11,8 +12,10 @@ use Illuminate\Support\Facades\Validator;
 class ScheduleController extends Controller
 {
     protected ScheduleService $scheduleService;
-    public function __construct(ScheduleService $scheduleService){
+    protected BookingService $bookingService;
+    public function __construct(ScheduleService $scheduleService,BookingService $bookingService){
         $this->scheduleService = $scheduleService;
+        $this->bookingService = $bookingService;
     }
     public function index()
     {
@@ -32,7 +35,11 @@ class ScheduleController extends Controller
     }
     public function showForServiceId(Request $request){
         $schedules=$this->scheduleService->showForServiceId($request->service_id);
-        return response()->json(['schedules'=>ScheduleResource::collection($schedules)],200);
+        $schedulesFiltered=$schedules->filter(function($schedule){
+            $booking=$this->bookingService->getBookingByScheduleId($schedule->id);
+            return !$booking;
+        });
+        return response()->json(['schedules'=>ScheduleResource::collection($schedulesFiltered)],200);
     }
 
     /**

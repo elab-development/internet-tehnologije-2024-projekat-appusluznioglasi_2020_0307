@@ -11,7 +11,7 @@ const AppointmentList=({serviceId})=>{
     const [booking,setBooking]=useState();
 
     const handleBooking=(scheduleId)=>{
-        axiosClient.post(`bookings/create`,{schedule_id:scheduleId})
+        axiosClient.post(`/bookings/create`,{schedule_id:scheduleId})
             .then(({data})=>{
                 console.log(data);
                 setBooking(data.booking);
@@ -37,21 +37,40 @@ const AppointmentList=({serviceId})=>{
         return <h3>Nema dostupnih termina</h3>
     }
     return(
-        <div className="d-flex flex-column gap-3">
-            {schedules.map((schedule)=>(
-            <div
-            key={schedule.id}
-            className='border rounded p-3 shadow-sm d-flex justify-between align-items-center'>
-                <div>
-                    <h4 className='mb-1'><b>Datum: </b>{schedule.date}</h4>
-                    <p className='mb-1'>Vreme: Od <b>{schedule.time_from}</b> do: <b>{schedule.time_to}</b></p>
+        <div className="d-flex flex-column gap-4">
+            {schedules.map((schedule) => (
+                <div
+                    key={schedule.id}
+                    className="border rounded-4 p-4 shadow-lg bg-light d-flex justify-content-between align-items-center hover-shadow transition"
+                    style={{
+                        borderColor: "#e0e0e0",
+                        transition: "all 0.3s ease-in-out",
+                    }}
+                >
+                    <div>
+                        <h5 className="fw-bold text-primary mb-2">
+                            📅 Datum: <span className="text-dark">{schedule.date}</span>
+                        </h5>
+                        <p className="mb-0 text-secondary">
+                            ⏰ Vreme: od{" "}
+                            <b className="text-dark">{schedule.time_from}</b> do{" "}
+                            <b className="text-dark">{schedule.time_to}</b>
+                        </p>
+                    </div>
+                    <button
+                        className="btn btn-success px-4 py-2 rounded-pill shadow-sm"
+                        onClick={() => handleBooking(schedule.id)}
+                        style={{ transition: "all 0.2s ease-in-out" }}
+                        onMouseOver={(e) =>
+                            (e.currentTarget.style.transform = "scale(1.05)")
+                        }
+                        onMouseOut={(e) => (e.currentTarget.style.transform = "scale(1)")}
+                    >
+                        ✅ Rezerviši
+                    </button>
                 </div>
-                <button className='btn btn-success' onClick={()=>handleBooking(schedule.id)}>Rezerviši</button>
-
-            </div>
             ))}
         </div>
-
 
     );
 

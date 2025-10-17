@@ -5,7 +5,7 @@ const Profile=({user})=>{
 
     return (
       <div>
-          Profile
+
       </div>
     );
 }
