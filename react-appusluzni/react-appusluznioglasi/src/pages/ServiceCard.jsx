@@ -90,15 +90,20 @@ const ServiceCard = ({ service, onDelete, onEdit }) => {
                             </span>
                         </div>
 
+                        {
+
+                        }
                         {/* Dugme za Rezervaciju (celom dužinom) */}
-                        <Button
+                        {(user?.role === "user") && (
+
+                            <Button
                             variant="primary"
                             onClick={() => handleShowAppointments(service)}
                             className="w-100 rounded-pill px-3"
                         >
                             Rezerviši Termin
                         </Button>
-
+                        )}
                         {/* Dugme za Komentare (celom dužinom) */}
                         <Button
                             variant="outline-secondary"
