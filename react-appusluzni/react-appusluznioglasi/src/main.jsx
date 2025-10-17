@@ -14,6 +14,8 @@ import HomeCompanyFreelancer from "./pages/HomeCompanyFreelancer.jsx";
 import Profile from "./pages/Profile.jsx";
 import Services from "./pages/Services.jsx";
 import ServicesForUser from "./pages/ServicesForUser.jsx";
+import ResetPassword from "./pages/ResetPassword.jsx";
+import ForgotPassword from "./pages/ForgotPassword.jsx";
 
 
 createRoot(document.getElementById('root')).render(
@@ -25,6 +27,8 @@ createRoot(document.getElementById('root')).render(
         <Route path="/" element={<GuestLayout />}>
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+            <Route path="/forgot-password" element={<ForgotPassword />} />
+            <Route path="/reset-password" element={<ResetPassword />} />
         </Route>
 
         <Route path="/" element={<DefaultLayout />}>

@@ -57,8 +57,14 @@ const Login = () => {
           <input ref={passwordRef} type="password" placeholder="Password"/>
           <button className="btn btn-block">Login</button>
           <p className="message">Not registered? <Link to="/register">Create an account</Link></p>
+
+            <p className="message">Zaboravljena lozinka?<Link to="/forgot-password">
+               Restartuj lozinku
+            </Link></p>
+
         </form>
       </div>
+
     </div>
   )
 }
