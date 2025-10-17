@@ -335,3 +335,18 @@ table > tbody > tr > td {
     content: none !important;
     display: none !important;
 }
+
+
+
+
+.alert-success {
+  background-color: #d1e7dd !important;
+  color: #0f5132 !important;
+  border-color: #badbcc !important;
+}
+
+.alert-danger {
+  background-color: #f8d7da !important;
+  color: #842029 !important;
+  border-color: #f5c2c7 !important;
+}

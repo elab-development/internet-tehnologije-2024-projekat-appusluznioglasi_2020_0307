@@ -42,6 +42,15 @@ class ScheduleController extends Controller
         return response()->json(['schedules'=>ScheduleResource::collection($schedulesFiltered)],200);
     }
 
+    public function getAllByServiceId($serviceId)
+    {
+        $schedules = $this->scheduleService->showForServiceId($serviceId);
+        return response()->json([
+            'schedules' => ScheduleResource::collection($schedules),
+            'message' => "All schedules for service ID {$serviceId} fetched successfully."
+        ], 200);
+    }
+
     /**
      * Show the form for creating a new resource.
      */

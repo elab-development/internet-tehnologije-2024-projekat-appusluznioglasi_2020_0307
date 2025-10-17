@@ -38,7 +38,7 @@ Route::get("services/title/{title}", [ServiceController::class, 'show']);
 Route::middleware(['auth:sanctum','role:company,freelancer'])->group(function () {
 
     Route::get('/schedules/user', [ScheduleController::class, 'showForUser']);
-    Route::delete('/schedules/delete/{schedule}', [ScheduleController::class, 'destroy']);
+    Route::delete('/schedules/{schedule}', [ScheduleController::class, 'destroy']);
     Route::put('/schedules/update/{schedule}', [ScheduleController::class, 'update']);
     Route::resource('/companies', CompanyController::class);
     Route::post('/services', [ServiceController::class,'store']);
@@ -51,6 +51,7 @@ Route::middleware(['auth:sanctum','role:company,freelancer'])->group(function ()
     Route::post('/schedules', [ScheduleController::class,'store']);
 
     Route::get('/services/my-services', [ServiceController::class, 'getMyServices']);
+    Route::get('/schedules/service/{serviceId}/all', [ScheduleController::class, 'getAllByServiceId']);
 
 });
 
