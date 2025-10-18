@@ -8,6 +8,7 @@ use App\Http\Resources\UserResource;
 use App\Http\Services\CompanyService;
 use App\Http\Services\UserService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Validator;
 
 class AuthController extends Controller
@@ -46,14 +47,25 @@ class AuthController extends Controller
         }
 
         $user = $this->authService->addUser($request);
+        $geocodedData = ['address' => null, 'latitude' => null, 'longitude' => null];
 
         if ($request->role === 'company') {
-            $company = $this->companyService->addCompany([
+            $geocodedData = $this->geocodeAddress($request->address);
+
+            // Provera da li je geokodiranje uspešno
+            if (is_null($geocodedData['latitude'])) {
+                // Ako adresa nije pronađena, obrišite korisnika (ili vratite grešku)
+                $user->delete();
+                return response()->json(['address' => 'Navedena adresa nije validna ili nije pronađena.'], 422);
+            }
+            $companyData = array_merge([
                 'name' => $request->company_name,
-                'user_id' => $user->id,
+                'description'=>$request->description,
                 'badge_verified' => $request->badge_verified,
-                'description'=>$request->description
-            ]);
+                'user_id' => $user->id,
+            ], $geocodedData);
+
+            $company = $this->companyService->addCompany($companyData);
 
         }
         $token=$user->createToken('authToken')->plainTextToken;
@@ -68,5 +80,38 @@ class AuthController extends Controller
     public function getUserForId(Request $request){
         $user=$request->user();
         return response()->json(['user'=>$user],200);
+    }
+    protected function geocodeAddress(string $address): array
+    {
+        $apiKey = env('GOOGLE_MAPS_API_KEY');
+
+        if (!$apiKey || empty($address)) {
+            return ['address' => $address, 'latitude' => null, 'longitude' => null];
+        }
+
+        try {
+            $response = Http::timeout(5)->get('https://maps.googleapis.com/maps/api/geocode/json', [
+                'address' => $address,
+                'key' => $apiKey,
+            ]);
+
+            $data = $response->json();
+
+            if ($data['status'] === 'OK' && !empty($data['results'])) {
+                $location = $data['results'][0]['geometry']['location'];
+
+                return [
+                    'address' => $address,
+                    'latitude' => $location['lat'],
+                    'longitude' => $location['lng'],
+                ];
+            }
+
+        } catch (\Exception $e) {
+            \Log::error("Geocoding API Error: " . $e->getMessage());
+        }
+
+        // Vraćanje null koordinata ako geokodiranje nije uspelo
+        return ['address' => $address, 'latitude' => null, 'longitude' => null];
     }
 }

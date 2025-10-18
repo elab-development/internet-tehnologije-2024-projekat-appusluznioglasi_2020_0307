@@ -13,6 +13,9 @@ class CompanyService
                 'description'=>$request['description']??null,
                 'badge_verified'=>$request['badge_verified']??false,
                 'user_id'=>$request['user_id'],
+            'address' => $request['address'] ?? null,
+            'latitude' => $request['latitude'] ?? null,
+            'longitude' => $request['longitude'] ?? null,
             ]);
         return $company;
 

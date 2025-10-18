@@ -6,6 +6,7 @@ use App\Http\Controllers\BookingController;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\ScheduleController;
+use App\Models\Company;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
@@ -17,7 +18,11 @@ Route::post('/forgot-password', [PasswordResetController::class, 'sendResetLink'
 Route::post('/reset-password', [PasswordResetController::class, 'resetPassword']);
 
 Route::middleware(['auth:sanctum','role:user'])->group(function () {
-
+    Route::get('/companies/locations', function () {
+        return Company::select('name', 'description', 'latitude', 'longitude')
+            ->whereNotNull('latitude')
+            ->get();
+    });
 Route::get('/schedules', [ScheduleController::class,'showAllSchedules']);
 Route::get('/schedules/service/{service_id}', [ScheduleController::class,'showForServiceId']);
 

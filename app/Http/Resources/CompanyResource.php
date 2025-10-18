@@ -19,7 +19,10 @@ class CompanyResource extends JsonResource
             'name'=>$this->name,
             'admin'=>new UserResource($this->user),
             'badge_verified'=>$this->badge_verified,
-            'description'=>$this->description
+            'description'=>$this->description,
+            'address'=>$this->address,
+            'latitude'=>$this->latitude,
+            'longitude'=>$this->longitude,
 
         ];
     }

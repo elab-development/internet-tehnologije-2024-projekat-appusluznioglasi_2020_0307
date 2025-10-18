@@ -14,8 +14,10 @@ const Register = () => {
   const {setUser,setToken}=useStateContext();
   const [role, setRole] = useState('user');
   const [errors, setErrors] = useState(null)
+    const addressRef = useRef();
 
-   const onSubmit=(ev)=>{
+
+    const onSubmit=(ev)=>{
     ev.preventDefault();
     const payload={
       name:nameRef.current.value,
@@ -28,6 +30,7 @@ const Register = () => {
       payload.company_name = companyNameRef.current.value;
       payload.description = descriptionRef.current.value;
       payload.badge_verified = false;
+      payload.address=addressRef.current.value;
     }
 
 
@@ -120,6 +123,12 @@ const Register = () => {
                 placeholder="Company name"
                 required={role === 'company'}
               />
+                <input
+                    ref={addressRef}
+                    type="text"
+                    placeholder="Company Address"
+                    required
+                />
               <textarea
                 ref={descriptionRef}
                 placeholder="Company description (optional)"

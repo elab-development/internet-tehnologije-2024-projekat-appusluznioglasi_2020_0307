@@ -14,6 +14,9 @@ return new class extends Migration
         Schema::create('companies', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->string('address')->nullable(); // Polje za tekstualnu adresu
+            $table->decimal('latitude', 10, 7)->nullable(); // Geografska širina
+            $table->decimal('longitude', 10, 7)->nullable();
             $table->text('description')->nullable();
             $table->boolean('badge_verified')->default(false);
             $table->foreignId('user_id')->constrained("users")->onDelete("cascade");

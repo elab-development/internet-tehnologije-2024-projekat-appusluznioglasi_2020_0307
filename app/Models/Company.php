@@ -9,7 +9,7 @@ class Company extends Model
 {
     use HasFactory;
 
-    protected $fillable=['name','description','user_id','badge_verified'];
+    protected $fillable=['name','description','user_id','badge_verified','address','latitude','longitude'];
     protected $guarded=['id'];
     // Svaka kompanija pripada jednom user-u
     public function user()
