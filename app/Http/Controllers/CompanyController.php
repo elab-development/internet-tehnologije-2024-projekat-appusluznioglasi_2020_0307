@@ -83,4 +83,18 @@ class CompanyController extends Controller
          $this->service->deleteCompany($company);
          return response()->json(['data'=>new CompanyResource($company),'message'=>"Company deleted successfully"],201);
     }
+
+
+    public function getMyCompany(Request $request)
+{
+    $user = $request->user(); // 🔹 Ulogovani korisnik preko Sanctum-a
+
+    $company = $this->service->getCompanyByUserId($user->id);
+
+    if (!$company) {
+        return response()->json(['message' => 'Company not found for this user'], 404);
+    }
+
+    return response()->json(['company' => new CompanyResource($company)], 200);
+}
 }

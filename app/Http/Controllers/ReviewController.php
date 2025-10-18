@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\ReviewResource;
 use App\Http\Services\ReviewService;
+use App\Models\Company;
 use App\Models\Review;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -53,11 +54,12 @@ class ReviewController extends Controller
     {
 
     }
+    /*
     public function getReviewsForCompany(Request $request){
         $companyId= $request->company_id;
         $reviews=$this->reviewService->getReviewsForCompany($companyId);
         return response()->json(["reviews"=> ReviewResource::collection($reviews),"message"=>"Reviews were founded successfully"],202);
-    }
+    }*/
 
      public function getReviewsForFreelancer(Request $request){
         $freelancer_id= $request->freelancer_id;
@@ -80,4 +82,29 @@ class ReviewController extends Controller
     {
 
     }
+
+public function getReviewsForCompanyByUserId(Request $request)
+{
+    // ulogovani korisnik
+    $userId = auth()->id();
+
+    // da li ovaj user ima kompaniju?
+    $company = Company::where('user_id', $userId)->first();
+
+    if (!$company) {
+        return response()->json([
+            'message' => 'Ovaj korisnik nema povezanu kompaniju.'
+        ], 404);
+    }
+
+    // dohvati sve review-e za tu kompaniju
+    $reviews = $this->reviewService->getReviewsForCompany($company->id);
+
+    return response()->json([
+        'company_id' => $company->id,
+        'reviews' => ReviewResource::collection($reviews)
+    ], 200);
 }
+}
+
+

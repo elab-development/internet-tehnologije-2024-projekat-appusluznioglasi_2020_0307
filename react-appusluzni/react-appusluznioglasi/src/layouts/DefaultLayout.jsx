@@ -196,9 +196,9 @@ const DefaultLayout = () => {
                                     console.log("USER:", user);
 
                                     if (user.role === 'company') {
-                                        navigate(`/profile/${user.company.id}`)
+                                        navigate(`/profile/company/${user.id}`)
                                     } else {
-                                        navigate(`/profile/${user.id}`)
+                                        navigate(`/profile/freelancer/${user.id}`)
                                     }
                                 }
                                   }>

@@ -25,4 +25,10 @@ class CompanyService
        return  $company->delete();
     }
 
+
+    public function getCompanyByUserId(int $userId): ?Company
+{
+    return Company::where('user_id', $userId)->first();
+}
+
 }
