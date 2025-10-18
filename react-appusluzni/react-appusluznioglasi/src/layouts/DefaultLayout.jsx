@@ -99,6 +99,15 @@ const DefaultLayout = () => {
                         </Nav.Link>
                         )}
 
+                        {user?.role !== 'user' && (
+                            <Nav.Link
+                                onClick={() => navigate('/my-schedules')}
+                                style={{ cursor: 'pointer', color: '#555', fontWeight: '500' }}
+                            >
+                                My schedules
+                            </Nav.Link>
+                        )}
+
                         {user?.role === 'user' && (
                             <Form className="d-flex align-items-center" onSubmit={handleSearch} style={{ gap: '0.5rem', marginTop:'1rem' }}>
                                 <FormControl
@@ -140,14 +149,7 @@ const DefaultLayout = () => {
                         )}
 
 
-                        {user?.role !== 'user' && (
-                            <Nav.Link
-                                onClick={() => navigate('/termins')}
-                                style={{ cursor: 'pointer', color: '#555', fontWeight: '500' }}
-                            >
-                                Termini
-                            </Nav.Link>
-                        )}
+                        
                     </div>
 
                     <div className="d-flex align-items-center">

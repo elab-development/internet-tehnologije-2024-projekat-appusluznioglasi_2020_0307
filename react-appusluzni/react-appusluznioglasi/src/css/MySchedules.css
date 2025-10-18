@@ -1,0 +1,104 @@
+/* 🔹 Osnovni izgled tabele */
+.table {
+  border-collapse: separate !important;
+  border-spacing: 0;
+  background: #fff;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+
+/* 🔹 Zaglavlje kolona */
+.table thead th {
+  background-color: #f4f6f8;
+  color: #343a40;
+  font-weight: 600;
+  font-size: 0.95rem;
+  text-transform: uppercase;
+  padding: 14px 12px;
+  border-bottom: 2px solid #dee2e6;
+  text-align: left;
+  vertical-align: middle;
+}
+
+/* 🔹 Ćelije tela */
+.table tbody td {
+  font-size: 1rem;
+  color: #212529;
+  padding: 12px 16px;
+  border-top: 1px solid #dee2e6;
+  border-right: 1px solid #f1f3f5;
+  vertical-align: middle;
+}
+
+/* Zadnja kolona bez desne ivice */
+.table tbody td:last-child,
+.table thead th:last-child {
+  border-right: none;
+}
+
+/* 🔹 Prvi red ima gornju ivicu */
+.table tbody tr:first-child td {
+  border-top: 2px solid #dee2e6;
+}
+
+/* 🔹 Hover efekat za red */
+.table tbody tr:hover {
+  background-color: #f9fafb;
+}
+
+/* 🔹 Kolone “Akcija” i “Status” centrirane */
+.table td:nth-last-child(1),
+.table th:nth-last-child(1),
+.table td:nth-last-child(2),
+.table th:nth-last-child(2) {
+  text-align: center;
+}
+
+/* 🔹 Dugme Obrisi */
+.btn-delete {
+  background-color: #dc3545;
+  border: none;
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  padding: 6px 12px;
+  transition: all 0.2s ease;
+}
+
+.btn-delete:hover {
+  background-color: #bb2d3b;
+  transform: scale(1.05);
+  color: #fff;
+}
+
+/* 🔹 Red zauzetog termina */
+.table tbody tr.booked {
+  background-color: #fff2f2;
+}
+
+
+/**/
+
+/* 🔹 Hover efekat – vidljiv i prijatan */
+.custom-table tbody tr {
+  transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.custom-table tbody tr:hover {
+  background-color: #eef3f8 !important;
+  transform: scale(1.01);
+  cursor: pointer;
+}
+
+/* 🔹 Lagano razdvajanje kolona */
+.custom-table tbody td,
+.custom-table thead th {
+  border-right: 1px solid #e5e7eb;
+}
+
+/* Zadnja kolona bez ivice */
+.custom-table tbody td:last-child,
+.custom-table thead th:last-child {
+  border-right: none;
+}
