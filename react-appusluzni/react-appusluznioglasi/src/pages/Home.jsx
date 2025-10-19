@@ -16,7 +16,7 @@ const Home = () => {
     const [bookings, setBookings] = useState([]);
     const [services, setServices] = useState([]);
     const [loadingBookings, setLoadingBookings] = useState(true);
-    const [loadingServices, setLoadingServices] = useState(true);
+    const [loadingServices, setLoadingServices] = useState(false);
     const [showAllBookings, setShowAllBookings] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
     const [selectedService,setSelectedService]=useState(null);
@@ -61,10 +61,14 @@ const Home = () => {
             setLastPage(res.data.last_page);
         }
     };
+
     useEffect(() => {
         const fetchServices = async () => {
-            if (!token) return;
+            if (!token||user?.role!=="user"){
+                return
+            }
             try {
+                setLoadingServices(true)
                 console.log("TOken in bookings",token);
                 const res = await axiosClient.get("/services/topRated");
                 setServices(res.data.services || []);
@@ -201,8 +205,8 @@ const Home = () => {
                 </>
             )}
 
-            {/* Services */}
-            {!loadingServices && (
+            {(user?.role === 'user' ) && (!loadingServices) (
+
                 <>
                     <h3 className="mb-3" >Najbolje ocenjene usluge</h3>
                     {/* Proverite da li services postoji i ima elemente */}
@@ -220,6 +224,7 @@ const Home = () => {
                     )}
                 </>
             )}
+
 
 
         </Container>

@@ -10,7 +10,6 @@ import Register from './pages/Register.jsx'
 import NotFound from './pages/NotFound.jsx'
 import Home from './pages/Home.jsx'
 import { ContextProvider } from './contexts/ContextProvider.jsx'
-import HomeCompanyFreelancer from "./pages/HomeCompanyFreelancer.jsx";
 
 import Services from "./pages/Services.jsx";
 import ServicesForUser from "./pages/ServicesForUser.jsx";
@@ -40,8 +39,7 @@ createRoot(document.getElementById('root')).render(
             <Route path="/my-schedules" element={<MySchedules/>}/>
             <Route path="/profile/company/:id" element={<CompanyFreelancerProfilePage/>}/>
             <Route path="/profile/freelancer/:id" element={<CompanyFreelancerProfilePage/>}/>
-            <Route path="/homeCompanyFrelanceer" element={<HomeCompanyFreelancer/>}/>
-            
+
 
 
         </Route>

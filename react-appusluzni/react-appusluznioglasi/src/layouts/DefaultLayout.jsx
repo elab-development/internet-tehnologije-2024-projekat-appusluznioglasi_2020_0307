@@ -6,42 +6,57 @@ import {FaChevronDown} from "react-icons/fa";
 import axiosClient from "../axios-client.js";
 
 const DefaultLayout = () => {
-    const { user, token, setUser, setToken } = useStateContext();
+    const { user, token,setUser, setToken } = useStateContext();
     const navigate = useNavigate();
+    const [company,setCompany]=useState("");
     const [searchQuery,setSearchQuery]=useState("");
 
 
 
-
-    if (!token||!user){
-        <Navigate to={"/login"}/>
+    if (!token){
+        return <Navigate to='/login'/>
     }
 
 
     useEffect(() => {
-
         if (!user) {
             axiosClient.get(`/user/me`)
                 .then(({ data }) => {
                     setUser(data.user);
-                    console.log('ruta',data.user)
-                }
 
-                )
+                    if (data.user.role === "company") {
+                        axiosClient.get(`/companies/my`)
+                            .then(({ data }) => {
+                                setCompany(data.company);
+                                console.log("Kompanija:", data);
+                            })
+                            .catch((err) => {
+                                console.error("Greška pri učitavanju kompanije:", err);
+                                setCompany(null);
+                            });
+                    }
+
+                    console.log("Korisnik:", data.user);
+                })
                 .catch(err => console.error(err));
         }
-    },[user] );
+
+
+
+    }, [user]);
+
 
     const handleLogout = () => {
         setUser(null);
         setToken(null);
+        setCompany(null);
         navigate('/login');
     };
 
 
     const getDisplayName = () => {
         if (!user) return '';
-        if (user.role === 'company') return user.company?.name || 'Kompanija';
+        if (user.role === 'company') return company?.name || 'Kompanija';
         return user.name || 'Korisnik';
     };
 
@@ -90,12 +105,12 @@ const DefaultLayout = () => {
                         )}
 
 
-                        {user?.role !== 'user' && (
+                        {user?.role === 'user' && (
                         <Nav.Link
                             onClick={() => navigate('/services')}
                             style={{ cursor: 'pointer', color: '#555', fontWeight: '500' }}
                         >
-                            Usluge
+                            Services
                         </Nav.Link>
                         )}
 
@@ -149,7 +164,7 @@ const DefaultLayout = () => {
                         )}
 
 
-                        
+
                     </div>
 
                     <div className="d-flex align-items-center">
