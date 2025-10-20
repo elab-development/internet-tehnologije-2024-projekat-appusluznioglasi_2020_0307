@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { useLocation } from "react-router-dom";
 import axiosClient from "../axios-client";
 import { Row } from "react-bootstrap";
-import ServiceCard from "./ServiceCard.jsx";
+import ServiceCard from "../elements/ServiceCard.jsx";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 import { Range } from "react-range";

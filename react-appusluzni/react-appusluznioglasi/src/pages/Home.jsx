@@ -1,13 +1,20 @@
-import React, { useEffect, useState } from 'react';
-import axios from "axios";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useStateContext } from "../contexts/ContextProvider.jsx";
-import {Button, Card, Col, Container, Modal, Row, Spinner,Form} from "react-bootstrap";
+import {
+    Button,
+    Card,
+    Col,
+    Container,
+    Modal,
+    Row,
+    Spinner,
+    Form,
+} from "react-bootstrap";
 import axiosClient from "../axios-client.js";
-import ServiceListWithReviews from "./ServiceCard.jsx";
-import ServiceCard from "./ServiceCard.jsx";
-import AppointmentList from "./AppointmenList.jsx";
-
+import ServiceCard from "../elements/ServiceCard.jsx";
+import BookingCard from "../elements/BookingCart.jsx";
+import {BsArrowLeft, BsArrowRight} from "react-icons/bs";
 
 const Home = () => {
     const navigate = useNavigate();
@@ -17,221 +24,186 @@ const Home = () => {
     const [services, setServices] = useState([]);
     const [loadingBookings, setLoadingBookings] = useState(true);
     const [loadingServices, setLoadingServices] = useState(false);
-    const [showAllBookings, setShowAllBookings] = useState(false);
+
     const [currentPage, setCurrentPage] = useState(1);
-    const [selectedService,setSelectedService]=useState(null);
+    const [lastPage, setLastPage] = useState(1);
+    const [showAllBookings, setShowAllBookings] = useState(false);
 
     const [showReviewModal, setShowReviewModal] = useState(false);
     const [selectedBooking, setSelectedBooking] = useState(null);
     const [rating, setRating] = useState(0);
     const [comment, setComment] = useState("");
 
-    const [lastPage, setLastPage] = useState(1);
-
-    // Fetch bookings
+    // 📅 Fetch bookings
     const fetchBookings = async (page = 1) => {
         if (!token) return;
         try {
-            const res = await axiosClient.get(`/bookings/showForUserId?page=${page}`, );
-
+            setLoadingBookings(true);
+            const res = await axiosClient.get(`/bookings/showForUserId?page=${page}`);
             const newBookings = res.data?.bookings || [];
-
-            setBookings(prev => page === 1 ? newBookings : [...prev, ...res.data.bookings]);
+            setBookings(newBookings);
             setCurrentPage(res.data.current_page);
             setLastPage(res.data.last_page);
-            console.log("bookings", res.data.bookings);
+            console.log("📘 Bookings (page " + page + "):", newBookings);
         } catch (e) {
-            console.error(e);
+            console.error("❌ Greška pri učitavanju bookings:", e);
         } finally {
             setLoadingBookings(false);
         }
     };
 
-    useEffect(() => {
-        if (token) fetchBookings();
-    }, [user, token]);
-
-    const loadMoreBookings = async () => {
-        if (currentPage < lastPage) {
-            const res = await axiosClient.get(`/bookings/showForUserId?page=${currentPage + 1}`);
-            const newBookings = res.data?.bookings || [];
-
-            setBookings(prev => [...prev,...newBookings]);
-            setCurrentPage(res.data.current_page);
-            setLastPage(res.data.last_page);
+    // 💎 Fetch services (Top rated)
+    const fetchServices = async () => {
+        if (!token || user?.role !== "user") return;
+        try {
+            setLoadingServices(true);
+            const res = await axiosClient.get("/services/topRated");
+            if (res.data && res.data.services) {
+                setServices(res.data.services);
+                console.log("💎 Services loaded:", res.data.services);
+            }
+        } catch (e) {
+            console.error("❌ Greška pri učitavanju services:", e);
+        } finally {
+            setLoadingServices(false);
         }
     };
 
+    // ⏳ useEffects
     useEffect(() => {
-        const fetchServices = async () => {
-            if (!token||user?.role!=="user"){
-                return
-            }
-            try {
-                setLoadingServices(true)
-                console.log("TOken in bookings",token);
-                const res = await axiosClient.get("/services/topRated");
-                setServices(res.data.services || []);
-                console.log("services", res.data.services);
-            } catch (e) {
-                console.error(e);
-            } finally {
-                setLoadingServices(false);
-            }
-        };
-        fetchServices();
-    }, [token]);
+        if (token) {
+            fetchBookings();
+            fetchServices();
+        }
+    }, [token, user]);
 
     return (
         <>
+            <Container className="mt-4">
+                {(loadingBookings || loadingServices) && (
+                    <div className="text-center my-5">
+                        <Spinner animation="border" variant="primary" />
+                    </div>
+                )}
 
-        <Container className="mt-4">
-            {(loadingBookings || loadingServices) && <Spinner animation="border" />}
+                {/* BOOKINGS */}
+                {!loadingBookings && (
+                    <>
+                        <div className="d-flex align-items-center justify-content-between mb-3">
+                            <h3 className="fw-bold text-primary mb-0 d-flex align-items-center gap-2">
+                                📅 <span>Vaše rezervacije</span>
+                            </h3>
+                            {bookings.length > 0 && (
+                                <Button
+                                    variant="outline-primary"
+                                    size="sm"
+                                    onClick={() => setShowAllBookings(!showAllBookings)}
+                                    style={{
+                                        borderRadius: "20px",
+                                        fontWeight: "500",
+                                    }}
+                                >
+                                    {showAllBookings ? "Prikaži manje" : "Vidi još"}
+                                </Button>
+                            )}
+                        </div>
 
-            {/* Bookings */}
-            {!loadingBookings && (
-                <>
-                    <h3 className="mb-3">Vaše rezervacije</h3>
-                    {(bookings || []).length === 0 ? (
-                        <p>Nema rezervacija.</p>
-                    ) : (
-                        <Row>
-                            {(showAllBookings ? bookings : bookings.slice(0, 6)).map((booking) => {
-                                const bookingDate = new Date(booking.schedule?.date);
-                                const isPast = bookingDate < new Date(); // da li je termin prošao
-
-                                return (
-                                    <Col md={4} className="mb-4" key={booking.id}>
-                                        <Card
-                                            className="h-100 shadow-sm position-relative"
-                                            style={{ borderRadius: '12px', padding: '1rem' }}
-                                        >
-                                            <div
-                                                style={{
-                                                    position: 'absolute',
-                                                    top: '1rem',
-                                                    right: '1rem',
-                                                    fontSize: '0.9rem',
-                                                    color: '#555',
-                                                    fontWeight: '500',
+                        {bookings.length === 0 ? (
+                            <div className="text-center py-5 text-muted">
+                                <p className="fs-5">📭 Trenutno nemate rezervacija.</p>
+                            </div>
+                        ) : (
+                            <Row>
+                                {(showAllBookings ? bookings : bookings.slice(0, 6)).map(
+                                    (booking) => (
+                                        <Col md={6} lg={4} className="mb-4" key={booking.id}>
+                                            <BookingCard
+                                                booking={booking}
+                                                onAddReview={(b) => {
+                                                    setSelectedBooking(b);
+                                                    setShowReviewModal(true);
                                                 }}
-                                            >
-                                                {bookingDate.toLocaleDateString('sr-RS', {
-                                                    day: '2-digit',
-                                                    month: 'short',
-                                                    year: 'numeric',
-                                                })}
-                                            </div>
+                                            />
+                                        </Col>
+                                    )
+                                )}
+                            </Row>
+                        )}
 
-                                            <Card.Body className="d-flex flex-column justify-content-between h-100">
-                                                <Card.Title
-                                                    style={{
-                                                        textAlign: 'center',
-                                                        fontSize: '1.3rem',
-                                                        marginTop: '1rem',
-                                                    }}
-                                                    className="fw-bold mb-4"
-                                                >
-                                                    {booking.schedule?.service?.title || 'Nepoznata usluga'}
-                                                </Card.Title>
+                        {/* Pagination Controls */}
+                        {bookings.length > 0 && (
+                            <div
+                                className="d-flex justify-content-center align-items-center gap-4 mt-4"
+                                style={{
+                                    textAlign: "center",
+                                }}
+                            >
+                                <Button
+                                    variant="outline-primary"
+                                    disabled={currentPage === 1}
+                                    onClick={() => fetchBookings(currentPage - 1)}
+                                    className="d-flex justify-content-center align-items-center"
+                                    style={{
+                                        borderRadius: "50%",
+                                        width: "50px",
+                                        height: "50px",
+                                        fontSize: "2rem",
+                                    }}
+                                >
+                                    <BsArrowLeft></BsArrowLeft>
+                                </Button>
 
-                                                <div
-                                                    style={{
-                                                        border: '1px solid #ddd',
-                                                        borderRadius: '8px',
-                                                        padding: '0.5rem',
-                                                        fontSize: '0.85rem',
-                                                        marginBottom: 'auto',
-                                                    }}
-                                                >
-                                                    <h6 className="mb-2">
-                                                        <b>Izvršilac:</b>{' '}
-                                                        {booking.schedule?.service?.freelancer?.name ||
-                                                            booking.schedule?.service?.company?.name ||
-                                                            'Nepoznat'}
-                                                    </h6>
-                                                    <p className="mb-0">
-                                                        <b>Status:</b>{' '}
-                                                        <span
-                                                            className={`fw-bold text-${
-                                                                booking.status === 'confirmed' ? 'success' : 'warning'
-                                                            }`}
-                                                        >
-                                        {booking.status}
-                                    </span>
-                                                    </p>
-                                                </div>
+                                <span className="fw-semibold text-muted">
+                                    Strana {currentPage} / {lastPage}
+                                </span>
 
-                                                <div
-                                                    className="mt-3 mb-5"
-                                                    style={{ fontSize: '0.85rem', color: '#555' }}
-                                                >
-                                                    <b>Vreme:</b>{' '}
-                                                    {(booking.schedule?.time_from).slice(0, 5)} -{' '}
-                                                    {(booking.schedule?.time_to).slice(0, 5)}
-                                                </div>
+                                <Button
+                                    variant="outline-primary"
+                                    disabled={currentPage === lastPage}
+                                    onClick={() => fetchBookings(currentPage + 1)}
+                                    className="d-flex justify-content-center align-items-center"
+                                    style={{
+                                        borderRadius: "50%",
+                                        width: "50px",
+                                        height: "50px",
+                                        fontSize: "1.4rem",
+                                    }}
+                                >
+                                    <BsArrowRight />
 
-                                                {isPast && (
-                                                    <Button
-                                                        variant="primary"
-                                                        size="sm"
-                                                        className="position-absolute"
-                                                        style={{
-                                                            bottom: '1rem',
-                                                            right: '1rem',
-                                                            borderRadius: '8px',
-                                                        }}
-                                                        onClick={() => {
-                                                            setSelectedBooking(booking);
-                                                            setShowReviewModal(true);
-                                                        }}
-                                                    >
-                                                        Dodaj recenziju
-                                                    </Button>
-                                                )}
-                                            </Card.Body>
-                                        </Card>
-                                    </Col>
-                                );
-                            })}
-                        </Row>
-                    )}
+                                </Button>
+                            </div>
+                        )}
 
-                    {bookings.length > 6 && !showAllBookings && (
-                        <Button onClick={() => setShowAllBookings(true)}>Vidi još</Button>
-                    )}
+                        <hr className="my-5" />
+                    </>
+                )}
 
-                    <hr className="my-5" /> {/* Divider između bookings i services */}
-                </>
-            )}
+                {/* SERVICES */}
+                {user?.role === "user" && !loadingServices && (
+                    <>
+                        <h3 className="mb-3 fw-bold text-primary">
+                            💎 Najbolje ocenjene usluge
+                        </h3>
+                        {services && services.length > 0 ? (
+                            <Row>
+                                {services.map((service) => (
+                                    <ServiceCard key={service.id} service={service} />
+                                ))}
+                            </Row>
+                        ) : (
+                            <p>Nema sličnih usluga za prikaz.</p>
+                        )}
+                    </>
+                )}
+            </Container>
 
-            {(user?.role === 'user' ) && (!loadingServices) (
-
-                <>
-                    <h3 className="mb-3" >Najbolje ocenjene usluge</h3>
-                    {/* Proverite da li services postoji i ima elemente */}
-                    {services && services.length > 0 ? (
-                        <Row>
-                            {services.map((service) => (
-                                <ServiceCard
-                                    key={service.id}
-                                    service={service}
-                                />
-                            ))}
-                        </Row>
-                    ) : (
-                        <p>Nema sličnih usluga za prikaz.</p>
-                    )}
-                </>
-            )}
-
-
-
-        </Container>
+            {/* REVIEW MODAL */}
             <Modal show={showReviewModal} onHide={() => setShowReviewModal(false)}>
                 <Modal.Header closeButton>
                     <Modal.Title>
-                        Dodaj recenziju za {selectedBooking?.schedule?.service?.title}
+                        Dodaj recenziju za{" "}
+                        {selectedBooking?.schedule?.service?.title || "uslugu"}
                     </Modal.Title>
                 </Modal.Header>
 
@@ -250,8 +222,8 @@ const Home = () => {
                                             color: star <= rating ? "#ffc107" : "#ccc",
                                         }}
                                     >
-              ★
-            </span>
+                                        ★
+                                    </span>
                                 ))}
                             </div>
                         </Form.Group>
@@ -277,9 +249,9 @@ const Home = () => {
                         onClick={async () => {
                             await axiosClient.post("/reviews", {
                                 service_id: selectedBooking.schedule.service.id,
-                                rating:rating,
-                                comment:comment,
-                                user_id:user.id
+                                rating,
+                                comment,
+                                user_id: user.id,
                             });
                             setShowReviewModal(false);
                             alert("Recenzija uspešno dodata!");
@@ -289,9 +261,8 @@ const Home = () => {
                     </Button>
                 </Modal.Footer>
             </Modal>
-</>
-
-            );
+        </>
+    );
 };
 
 export default Home;

@@ -23,8 +23,6 @@ const Login = () => {
         setToken(data.token);
           if (data.user.role === 'user') {
               navigate('/home');
-          } else if (data.user.role === 'freelancer'||data.user.role==='company') {
-              navigate('/homeCompanyFrelanceer');
           }
       })
       .catch((err) => {

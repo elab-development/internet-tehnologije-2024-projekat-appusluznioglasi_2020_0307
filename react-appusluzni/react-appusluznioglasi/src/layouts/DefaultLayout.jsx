@@ -105,14 +105,7 @@ const DefaultLayout = () => {
                         )}
 
 
-                        {user?.role === 'user' && (
-                        <Nav.Link
-                            onClick={() => navigate('/services')}
-                            style={{ cursor: 'pointer', color: '#555', fontWeight: '500' }}
-                        >
-                            Services
-                        </Nav.Link>
-                        )}
+
 
                         {user?.role !== 'user' && (
                             <Nav.Link

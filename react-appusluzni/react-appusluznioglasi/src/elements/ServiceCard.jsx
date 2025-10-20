@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Card, Button, Modal, Spinner, Col } from "react-bootstrap"; // Dodat je Col import
 import { FaStar } from "react-icons/fa";
-import axiosClient from "../axios-client";
+import axiosClient from "../axios-client.js";
 import AppointmentList from "./AppointmenList.jsx";
 import { useStateContext } from "../contexts/ContextProvider.jsx";
 

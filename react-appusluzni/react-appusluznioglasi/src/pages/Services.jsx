@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useStateContext } from "../contexts/ContextProvider";
 import axiosClient from "../axios-client";
 import { Button, Form, Modal, Row } from "react-bootstrap";
-import ServiceCard from "./ServiceCard";
+import ServiceCard from "../elements/ServiceCard.jsx";
 
 const Services=()=>{
  const { user } = useStateContext();
@@ -62,7 +62,7 @@ const Services=()=>{
   if (!window.confirm("Da li ste sigurni da želite da obrišete ovu uslugu?")) return;
   try {
     await axiosClient.delete(`/services/${id}`);
- 
+
     setServices((prev) => prev.filter((s) => s.id !== id));
   } catch (err) {
     console.error("Greška pri brisanju usluge:", err);
