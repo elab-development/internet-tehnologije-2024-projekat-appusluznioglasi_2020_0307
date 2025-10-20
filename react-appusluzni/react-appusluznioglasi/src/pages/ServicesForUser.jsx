@@ -267,7 +267,7 @@ const Services = () => {
             )}
 
             <h3 className="mt-5 mb-3">Lokacije Vršilaca Usluga</h3>
-            <div ref={mapContainerRef} className="map-container"></div>
+            <div ref={mapContainerRef} style={{marginBottom:"3rem"}} className="map-container"></div>
         </div>
     );
 };

@@ -33,9 +33,37 @@ class BookingService
     public function getBookingByScheduleId($scheduleId): ?Booking{
         return Booking::where('schedule_id',$scheduleId)->first();
     }
-    public function getBookingsByUserId($userId,$perPage){
-        return Booking::where('user_id',$userId)->paginate($perPage);
+    public function getBookingsByUserId(User $user, $perPage = 10)
+    {
+        if ($user->role === 'user') {
+            // običan korisnik vidi svoje bookings
+            return Booking::where('user_id', $user->id)
+                ->with(['schedule.service']) // eager load da smanjimo broj upita
+                ->paginate($perPage);
+        }
+
+        if ($user->role === 'company') {
+            // company vidi bookings gde je company vlasnik servisa
+            return Booking::whereHas('schedule.service', function ($query) use ($user) {
+                $query->where('company_id', $user->id);
+            })
+                ->with(['schedule.service'])
+                ->paginate($perPage);
+        }
+
+        if ($user->role === 'freelancer') {
+            // freelancer vidi bookings gde je freelancer vlasnik servisa
+            return Booking::whereHas('schedule.service', function ($query) use ($user) {
+                $query->where('freelancer_id', $user->id);
+            })
+                ->with(['schedule.service'])
+                ->paginate($perPage);
+        }
+
+
+        return Booking::paginate($perPage);
     }
+
     public function getBookingsByStatusForUserId($status,User $user): Collection{
         if($user->role == 'user'){
             return Booking::where('status',$status)

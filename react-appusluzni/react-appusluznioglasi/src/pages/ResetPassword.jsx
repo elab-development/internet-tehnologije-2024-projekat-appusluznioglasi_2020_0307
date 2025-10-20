@@ -18,6 +18,8 @@ export default function ResetPassword() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         setError("");
+        setValidationErrors(null); // Resetuj greške validacije
+
         try {
             const res = await axiosClient.post("/reset-password", {
                 email,
@@ -25,10 +27,20 @@ export default function ResetPassword() {
                 password_confirmation,
                 token,
             });
+
             setMessage(res.data.message);
             setTimeout(() => navigate("/login"), 2000); // prebacuje na login
         } catch (err) {
-            setError(err.response?.data?.message || "Greška prilikom resetovanja lozinke.");
+            const response = err.response;
+            if (response && response.status === 422) {
+                // Laravel greška validacije (najčešće 422)
+                setValidationErrors(response.data.errors);
+            } else if (response && response.status === 400) {
+                // Laravel greška "Token nije validan" (400)
+                setError(response.data.message);
+            } else {
+                setError("Došlo je do nepoznate greške na serveru.");
+            }
         }
     };
 

@@ -38,11 +38,9 @@ const Register = () => {
     axiosClient.post("/register",payload).then(({data})=>{
       setToken(data.token)
       setUser(data.user)
-        if (data.user.role === 'user') {
+
             navigate('/home');
-        } else if (data.user.role === 'freelancer'||data.user.role==='company') {
-            navigate('/homeCompanyFrelanceer');
-        }
+
 
     })
 

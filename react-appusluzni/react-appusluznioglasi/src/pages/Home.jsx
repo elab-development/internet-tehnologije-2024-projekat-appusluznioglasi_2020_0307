@@ -93,19 +93,7 @@ const Home = () => {
                             <h3 className="fw-bold text-primary mb-0 d-flex align-items-center gap-2">
                                 📅 <span>Vaše rezervacije</span>
                             </h3>
-                            {bookings.length > 0 && (
-                                <Button
-                                    variant="outline-primary"
-                                    size="sm"
-                                    onClick={() => setShowAllBookings(!showAllBookings)}
-                                    style={{
-                                        borderRadius: "20px",
-                                        fontWeight: "500",
-                                    }}
-                                >
-                                    {showAllBookings ? "Prikaži manje" : "Vidi još"}
-                                </Button>
-                            )}
+
                         </div>
 
                         {bookings.length === 0 ? (

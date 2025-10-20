@@ -21,9 +21,9 @@ const Login = () => {
       .then(({data}) => {
         setUser(data.user)
         setToken(data.token);
-          if (data.user.role === 'user') {
+
               navigate('/home');
-          }
+
       })
       .catch((err) => {
         const response = err.response;
