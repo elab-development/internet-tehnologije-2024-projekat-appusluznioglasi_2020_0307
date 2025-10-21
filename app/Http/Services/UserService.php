@@ -17,9 +17,17 @@ class UserService
             'role'=>$request['role'],
         ]);
     }
-    public function getUser(Request $request):User{
-        return User::where('email',$request['email'])->firstOrFail();
+    public function getUser(Request $request): ?User
+    {
+        $user = User::where('email', $request->email)->first();
+
+        if (!$user || !Hash::check($request->password, $user->password)) {
+            return null; // ili baci grešku
+        }
+
+        return $user;
     }
+
     public function getUserForId( $request):User{
         return User::where('id',$request)->firstOrFail();
     }

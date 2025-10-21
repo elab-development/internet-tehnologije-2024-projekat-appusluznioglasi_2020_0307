@@ -27,10 +27,18 @@ class AuthController extends Controller
         if($validator->fails()){
             return response()->json($validator->errors()->toJson(),400);
         }
-        $user=$this->authService->getUser($request);
+        $user = $this->authService->getUser($request);
 
-        $token=$user->createToken('authToken')->plainTextToken;
-        return response()->json(['token'=>$token,'user'=>new UserResource($user)],200);
+        if (!$user) {
+            return response()->json(['error' => 'Neispravan email ili lozinka'], 401);
+        }
+
+        $token = $user->createToken('authToken')->plainTextToken;
+
+        return response()->json([
+            'token' => $token,
+            'user' => new UserResource($user)
+        ], 200);
     }
     public function register(Request $request){
         $validator=Validator::make($request->all(),[

@@ -14,11 +14,12 @@ export default function ResetPassword() {
     const [password_confirmation, setPasswordConfirmation] = useState("");
     const [message, setMessage] = useState("");
     const [error, setError] = useState("");
+    const [validationErrors, setValidationErrors] = useState(null); // ✅ dodato
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         setError("");
-        setValidationErrors(null); // Resetuj greške validacije
+        setValidationErrors(null); // reset validacionih grešaka
 
         try {
             const res = await axiosClient.post("/reset-password", {
@@ -29,14 +30,12 @@ export default function ResetPassword() {
             });
 
             setMessage(res.data.message);
-            setTimeout(() => navigate("/login"), 2000); // prebacuje na login
+            setTimeout(() => navigate("/login"), 2000);
         } catch (err) {
             const response = err.response;
             if (response && response.status === 422) {
-                // Laravel greška validacije (najčešće 422)
                 setValidationErrors(response.data.errors);
             } else if (response && response.status === 400) {
-                // Laravel greška "Token nije validan" (400)
                 setError(response.data.message);
             } else {
                 setError("Došlo je do nepoznate greške na serveru.");
@@ -56,7 +55,11 @@ export default function ResetPassword() {
                         onChange={(e) => setEmail(e.target.value)}
                         required
                     />
+                    {validationErrors?.email && (
+                        <div className="text-danger small mt-1">{validationErrors.email[0]}</div>
+                    )}
                 </Form.Group>
+
                 <Form.Group className="mb-3">
                     <Form.Label>Nova lozinka</Form.Label>
                     <Form.Control
@@ -65,7 +68,11 @@ export default function ResetPassword() {
                         onChange={(e) => setPassword(e.target.value)}
                         required
                     />
+                    {validationErrors?.password && (
+                        <div className="text-danger small mt-1">{validationErrors.password[0]}</div>
+                    )}
                 </Form.Group>
+
                 <Form.Group className="mb-3">
                     <Form.Label>Potvrdi lozinku</Form.Label>
                     <Form.Control
@@ -75,10 +82,12 @@ export default function ResetPassword() {
                         required
                     />
                 </Form.Group>
+
                 <Button type="submit" variant="success" className="w-100">
                     Resetuj lozinku
                 </Button>
             </Form>
+
             {message && <Alert variant="success" className="mt-3">{message}</Alert>}
             {error && <Alert variant="danger" className="mt-3">{error}</Alert>}
         </div>
