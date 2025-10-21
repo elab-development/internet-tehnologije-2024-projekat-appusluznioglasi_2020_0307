@@ -51,6 +51,9 @@ const Home = () => {
             setLoadingBookings(false);
         }
     };
+    const handleBookingDeleted = (deletedId) => {
+        setBookings(prev => prev.filter(b => b.id !== deletedId));
+    };
 
     // 💎 Fetch services (Top rated)
     const fetchServices = async () => {
@@ -111,6 +114,7 @@ const Home = () => {
                                                     setSelectedBooking(b);
                                                     setShowReviewModal(true);
                                                 }}
+                                                onBookingDeleted={handleBookingDeleted}
                                             />
                                         </Col>
                                     )
@@ -176,7 +180,7 @@ const Home = () => {
                         {services && services.length > 0 ? (
                             <Row>
                                 {services.map((service) => (
-                                    <ServiceCard key={service.id} service={service} />
+                                    <ServiceCard key={service.id} service={service} refreshBookings={fetchBookings}/>
                                 ))}
                             </Row>
                         ) : (

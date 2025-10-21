@@ -7,13 +7,15 @@ import { useStateContext } from "../contexts/ContextProvider.jsx";
 
 
 
-const ServiceCard = ({ service, onDelete, onEdit }) => {
+const ServiceCard = ({ service, onDelete, onEdit,refreshBookings }) => {
     const { user } = useStateContext();
     const [showReviewsModal, setShowReviewsModal] = useState(false);
     const [reviews, setReviews] = useState([]);
     const [loadingReviews, setLoadingReviews] = useState(false);
     const [showModal,setShowModal]=useState(false);
     const [selectedService,setSelectedService]=useState(null);
+    const [showAppointments, setShowAppointments] = useState(false);
+
 
     const handleShowAppointments=(service)=>{
         setSelectedService(service);
@@ -98,7 +100,12 @@ const ServiceCard = ({ service, onDelete, onEdit }) => {
 
                             <Button
                             variant="primary"
-                            onClick={() => handleShowAppointments(service)}
+                            onClick={() => {
+                                handleShowAppointments(service)
+                                setShowAppointments(true)
+                            }
+
+                            }
                             className="w-100 rounded-pill px-3"
                         >
                             Rezerviši Termin
@@ -168,7 +175,10 @@ const ServiceCard = ({ service, onDelete, onEdit }) => {
                 </Modal.Header>
                 <Modal.Body>
                     {selectedService?(
-                        <AppointmentList serviceId={service?.id}></AppointmentList>
+                        <AppointmentList
+                            serviceId={service?.id}
+                            onClose={() => setShowModal(false)}
+                            refreshBookings={refreshBookings} ></AppointmentList>
                     ):(
                         <p>Ucitavanje...</p>
                     )}

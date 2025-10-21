@@ -1,8 +1,30 @@
 import { Card, Button } from "react-bootstrap";
+import {useState} from "react";
+import axios from "axios";
+import axiosClient from "../axios-client.js";
 
-const BookingCard = ({ booking, onAddReview }) => {
+const BookingCard = ({ booking, onAddReview,onBookingDeleted }) => {
     const bookingDate = new Date(booking.schedule?.date);
     const isPast = bookingDate < new Date();
+
+    const [deleting, setDeleting] = useState(false);
+
+    const handleDelete=()=>{
+        if (!window.confirm("Da li sigurno želiš da otkažeš ovu rezervaciju?")) return;
+
+        setDeleting(true)
+
+        axiosClient.delete(`/bookings/delete/${booking.id}`)
+            .then(()=>{
+                alert("✅ Rezervacija uspešno otkazana.");
+                if (onBookingDeleted) {
+                    onBookingDeleted(booking.id);
+                }
+            }).catch((err)=>{
+                console.log(err)
+        }) .finally(() => setDeleting(false));
+
+    }
 
     return (
         <Card
@@ -78,7 +100,7 @@ const BookingCard = ({ booking, onAddReview }) => {
                     </div>
                 </div>
 
-                {isPast && (
+                {isPast ? (
                     <Button
                         variant="outline-primary"
                         className="w-100 mt-2"
@@ -89,6 +111,19 @@ const BookingCard = ({ booking, onAddReview }) => {
                         onClick={() => onAddReview(booking)}
                     >
                         ⭐ Dodaj recenziju
+                    </Button>
+                ) : (
+                    <Button
+                        variant="outline-danger"
+                        className="w-100 mt-2"
+                        style={{
+                            borderRadius: "10px",
+                            fontWeight: "500",
+                        }}
+                        onClick={handleDelete}
+                        disabled={deleting}
+                    >
+                        {deleting ? "Brisanje..." : "🗑️ Otkaži rezervaciju"}
                     </Button>
                 )}
             </Card.Body>
