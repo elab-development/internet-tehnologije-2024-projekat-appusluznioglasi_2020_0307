@@ -23,6 +23,7 @@ class CompanyResource extends JsonResource
             'address'=>$this->address,
             'latitude'=>$this->latitude,
             'longitude'=>$this->longitude,
+            'created_at' => $this->created_at
 
         ];
     }
