@@ -43,6 +43,7 @@ const CompanyFreelancerProfilePage = () => {
         }
 
         setProfile(profileData);
+        console.log("PROFILE CREATED_AT:", profileData.created_at);
 
         const allServices = servicesRes?.data?.services || [];
         setTotalServicesCount(allServices.length); // ✅ postavi ukupan broj usluga
@@ -215,7 +216,11 @@ const CompanyFreelancerProfilePage = () => {
           </Col>
           <Col>
             <h4 className="fw-bold text-secondary mb-0">
-              {new Date(user.created_at).toLocaleDateString()}
+           
+       {profile?.created_at
+  ? new Date(profile.created_at.replace(" ", "T")).toLocaleDateString("sr-RS")
+  : "—"}
+              
             </h4>
             <p className="text-muted">Član od</p>
           </Col>

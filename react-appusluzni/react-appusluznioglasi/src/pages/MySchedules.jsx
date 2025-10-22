@@ -18,7 +18,7 @@ const MySchedules = () => {
       const list = data.services || [];
       setServices(list);
 
-      // ✅ Ako postoji bar jedna usluga – odmah selektuj prvu i učitaj termine
+      
       if (list.length > 0) {
         setSelectedServiceId(list[0].id);
         loadSchedules(list[0].id);
