@@ -45,7 +45,7 @@ class BookingService
         if ($user->role === 'company') {
             // company vidi bookings gde je company vlasnik servisa
             return Booking::whereHas('schedule.service', function ($query) use ($user) {
-                $query->where('company_id', $user->id);
+                $query->where('company_id', $user->company->id);
             })
                 ->with(['schedule.service'])
                 ->paginate($perPage);
